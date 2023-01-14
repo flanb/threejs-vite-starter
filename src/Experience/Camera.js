@@ -8,9 +8,11 @@ export default class Camera {
     this.sizes = this.experience.sizes;
     this.scene = this.experience.scene;
     this.canvas = this.experience.canvas;
+    this.debug = this.experience.debug;
 
     this.setInstance();
     this.setControls();
+    if (this.debug.active) this.setDebug();
   }
 
   setInstance() {
@@ -33,6 +35,20 @@ export default class Camera {
   resize() {
     this.instance.aspect = this.sizes.width / this.sizes.height;
     this.instance.updateProjectionMatrix();
+  }
+
+  setDebug() {
+    this.debugFolder = this.debug.ui.addFolder({
+      title: "Camera",
+    });
+
+    this.debugFolder
+      .addInput(this.controls, "enabled", {
+        label: "Orbit Controls",
+      })
+      .on("change", (value) => {
+        this.controls.reset();
+      });
   }
 
   update() {
