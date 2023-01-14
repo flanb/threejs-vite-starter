@@ -29,6 +29,7 @@ export default class Cube {
   setMesh() {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.copy(this.position);
+    this.mesh.name = "cube";
     this.scene.add(this.mesh);
   }
 }

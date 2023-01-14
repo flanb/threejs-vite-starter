@@ -24,6 +24,8 @@ export default class Resources extends EventEmitter {
   }
 
   startLoading() {
+    if (window.experience.debug.active)
+      console.debug("⏳ Loading resources...");
     // Load each source
     for (const source of this.sources) {
       switch (source.type) {
@@ -51,10 +53,15 @@ export default class Resources extends EventEmitter {
 
   sourceLoaded(source, file) {
     this.items[source.name] = file;
-
     this.loaded++;
 
+    if (window.experience.debug.active)
+      console.debug(
+        `🖼️ ${source.name} loaded. (${this.loaded}/${this.toLoad})`
+      );
+
     if (this.loaded === this.toLoad) {
+      if (window.experience.debug.active) console.debug("✅ Resources loaded!");
       this.trigger("ready");
     }
   }
