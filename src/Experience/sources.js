@@ -23,7 +23,7 @@ export default [
   },
   {
     name: "foxModel",
-    type: "gltfModel",
+    type: "gltf",
     path: "models/Fox/glTF/Fox.gltf",
   },
 ];
