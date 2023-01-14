@@ -1,6 +1,7 @@
 {
-  "name": "vite-project",
-  "private": true,
+  "name": "threejs-vite-starter",
+  "description": "A starter template for Three.js with Vite",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
