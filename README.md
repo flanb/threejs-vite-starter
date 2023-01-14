@@ -7,6 +7,9 @@ npm install
 npm run dev
 ```
 
+## Enable debug mode
+Add `#debug` to the url to enable debug mode.
+
 ## Stack
 - [`Threejs`](https://threejs.org/)
 - [`Vite`](https://vitejs.dev/)
