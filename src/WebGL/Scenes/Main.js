@@ -21,6 +21,6 @@ export default class Main {
   }
 
   update() {
-    if (this.fox) this.fox.manager.update();
+    if (this.fox) this.fox.update();
   }
 }
