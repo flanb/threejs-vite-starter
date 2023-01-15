@@ -1,10 +1,10 @@
 import Experience from "../Experience.js";
-import Environment from "./Environment.js";
-import Floor from "./Floor.js";
-import Fox from "./Fox.js";
-import Cube from "./Cube/Cube.js";
+import Environment from "../Components/Environment.js";
+import Floor from "../Components/Floor.js";
+import Fox from "../Components/Fox.js";
+import Cube from "../Components/Cube/Cube.js";
 
-export default class World {
+export default class Main {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;

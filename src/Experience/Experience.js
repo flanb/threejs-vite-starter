@@ -3,9 +3,8 @@ import Sizes from "./Utils/Sizes.js";
 import Time from "./Utils/Time.js";
 import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
-import World from "./World/World.js";
 import Resources from "./Utils/Resources.js";
-
+import SceneManager from "./Utils/SceneManager.js";
 import sources from "./sources.js";
 import { Mesh, Scene } from "three";
 
@@ -33,7 +32,7 @@ export default class Experience {
     this.resources = new Resources(sources);
     this.camera = new Camera();
     this.renderer = new Renderer();
-    this.world = new World();
+    this.activeScene = new SceneManager();
 
     // Resize event
     this.sizes.on("resize", () => {
@@ -53,7 +52,7 @@ export default class Experience {
 
   update() {
     this.camera.update();
-    this.world.update();
+    this.activeScene.update();
     this.renderer.update();
     this.debug.update();
   }
