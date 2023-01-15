@@ -1,7 +1,7 @@
 import Experience from "../Experience.js";
 import Environment from "../Components/Environment.js";
 import Floor from "../Components/Floor.js";
-import Fox from "../Components/Fox.js";
+import Fox from "../Components/Fox/Fox.js";
 import Cube from "../Components/Cube/Cube.js";
 
 export default class Main {
@@ -21,6 +21,6 @@ export default class Main {
   }
 
   update() {
-    if (this.fox) this.fox.update();
+    if (this.fox) this.fox.manager.update();
   }
 }

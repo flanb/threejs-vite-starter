@@ -1,13 +1,13 @@
-import * as THREE from "three";
-import Experience from "../Experience.js";
+import Experience from "../../Experience.js";
+import { AnimationMixer, Mesh } from "three";
 
 export default class Fox {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
-    this.time = this.experience.time;
     this.debug = this.experience.debug;
+    this.time = this.experience.time;
 
     // Debug
     if (this.debug.active) {
@@ -30,7 +30,7 @@ export default class Fox {
     this.scene.add(this.model);
 
     this.model.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof Mesh) {
         child.castShadow = true;
       }
     });
@@ -40,7 +40,7 @@ export default class Fox {
     this.animation = {};
 
     // Mixer
-    this.animation.mixer = new THREE.AnimationMixer(this.model);
+    this.animation.mixer = new AnimationMixer(this.model);
 
     // Actions
     this.animation.actions = {};

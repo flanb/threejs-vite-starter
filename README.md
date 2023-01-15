@@ -7,9 +7,6 @@ npm install
 npm run dev
 ```
 
-## Enable debug mode
-Add `#debug` to the url to enable debug mode.
-
 ## Stack
 - [`Threejs`](https://threejs.org/)
 - [`Vite`](https://vitejs.dev/)
@@ -17,4 +14,6 @@ Add `#debug` to the url to enable debug mode.
 - [`Glslify`](https://github.com/KusStar/vite-plugin-glslify)
 
 
-[//]: # (## Features)
+## Features
+- `Scene management` : You can add multiple scenes and switch between them by adding `?scene=scene-name` to the url
+- `Debug mode` : You can enable debug mode by adding `#debug` to the url
