@@ -1,6 +1,6 @@
 import { Pane } from "tweakpane";
 import Stats from "stats.js";
-import Experience from "../Experience.js";
+import Experience from "webgl/Experience";
 
 export default class Debug {
   constructor() {

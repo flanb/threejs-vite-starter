@@ -20,7 +20,7 @@ export default class Renderer {
   setInstance() {
     this.instance = new WebGLRenderer({
       canvas: this.canvas,
-      antialias: true,
+      powerPreference: "high-performance",
     });
     this.instance.physicallyCorrectLights = true;
     this.instance.outputEncoding = sRGBEncoding;
