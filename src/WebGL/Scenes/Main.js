@@ -1,8 +1,8 @@
 import Experience from "../Experience.js";
-import Environment from "../Components/Environment.js";
-import Floor from "../Components/Floor.js";
-import Fox from "../Components/Fox/Fox.js";
-import Cube from "../Components/Cube/Cube.js";
+import Environment from "components/Environment.js";
+import Floor from "components/Floor.js";
+import Fox from "components/Fox/Fox.js";
+import Cube from "components/Cube/Cube.js";
 
 export default class Main {
   constructor() {

@@ -1,6 +1,5 @@
 import Experience from "../Experience.js";
-import Environment from "../Components/Environment.js";
-import Cube from "../Components/Cube/Cube.js";
+import Cube from "components/Cube/Cube.js";
 
 export default class Main {
   constructor() {

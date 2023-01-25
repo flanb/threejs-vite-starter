@@ -1,4 +1,4 @@
-import Experience from "../../Experience.js";
+import Experience from "webgl/Experience.js";
 import fragmentShader from "./fragmentShader.frag";
 import vertexShader from "./vertexShader.vert";
 import { BoxGeometry, Mesh, ShaderMaterial, Vector3 } from "three";

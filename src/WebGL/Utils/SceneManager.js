@@ -1,4 +1,4 @@
-import config from "../Scenes/config";
+import config from "scenes/config";
 
 export default class SceneManager {
   constructor() {
