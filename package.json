@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "three": "^0.148.0"
+    "three": "^0.149.0"
   },
   "devDependencies": {
     "stats.js": "^0.17.0",
-    "tweakpane": "^3.1.2",
+    "tweakpane": "^3.1.4",
     "vite": "^4.0.4",
     "vite-plugin-glslify": "^2.0.1"
   }
