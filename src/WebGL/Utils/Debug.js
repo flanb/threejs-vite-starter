@@ -122,23 +122,77 @@ export default class Debug {
   }
 
   setStats() {
-    this.stats = new Stats();
-    //draw call panel
-    this.drawCallPanel = this.stats.addPanel(
-      new Stats.Panel("DCALLS", "#ff8", "#221")
-    );
-    this.stats.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
+    const statsJsPanel = new Stats();
+    document.body.appendChild(statsJsPanel.domElement);
+    const monitoringValues = [
+      {
+        name: "Calls",
+        value: () => this.experience.renderer.instance.info.render.calls,
+      },
+      {
+        name: "Triangles",
+        value: () => this.experience.renderer.instance.info.render.triangles,
+      },
+      {
+        name: "Lines",
+        value: () => this.experience.renderer.instance.info.render.lines,
+      },
+      {
+        name: "Points",
+        value: () => this.experience.renderer.instance.info.render.points,
+      },
+      {
+        name: "Geometries",
+        value: () => this.experience.renderer.instance.info.memory.geometries,
+      },
+      {
+        name: "Materials",
+        value: () => this.experience.renderer.instance.info.programs.length,
+      },
+      {
+        name: "Textures",
+        value: () => this.experience.renderer.instance.info.memory.textures,
+      },
+    ];
 
-    document.body.appendChild(this.stats.dom);
+    const monitoringSection = document.createElement("section");
+    Object.assign(monitoringSection.style, {
+      position: "absolute",
+      bottom: "1rem",
+      left: "1rem",
+      pointerEvents: "none",
+      color: "white",
+      zIndex: "1000",
+      display: "flex",
+      gap: "1rem",
+      fontSize: "12px",
+    });
+
+    monitoringValues.forEach((monitoringValue) => {
+      const monitoringValueElement = document.createElement("span");
+      monitoringValueElement.id = monitoringValue.name.toLowerCase();
+      monitoringValue.element = monitoringValueElement;
+      monitoringSection.appendChild(monitoringValueElement);
+    });
+
+    document.body.appendChild(monitoringSection);
+
+    this.stats = {
+      monitoringValues,
+      update: () => {
+        statsJsPanel.update();
+        monitoringValues.forEach((monitoringValue) => {
+          if (monitoringValue.value() === monitoringValue.lastValue) return;
+          monitoringValue.lastValue = monitoringValue.value();
+          monitoringValue.element.innerHTML = `<b>${monitoringValue.lastValue}</b> ${monitoringValue.name}`;
+        });
+      },
+    };
   }
 
   update() {
     if (this.active) {
       this.stats.update();
-      this.drawCallPanel.update(
-        this.experience.renderer.instance.info.render.calls,
-        200
-      );
     }
   }
 }
