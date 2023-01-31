@@ -10,26 +10,96 @@ export default class Camera {
     this.canvas = this.experience.canvas;
     this.debug = this.experience.debug;
 
+    this.options = {
+      fov: 35,
+      near: 1,
+      far: 100,
+      position: {
+        x: 6,
+        y: 4,
+        z: 8,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+    };
+
     this.setInstance();
     this.setControls();
+    this.applySavedSettings();
     if (this.debug.active) this.setDebug();
   }
 
   setInstance() {
     this.instance = new PerspectiveCamera(
-      35,
+      this.options.fov,
       this.sizes.width / this.sizes.height,
-      0.1,
-      100
+      this.options.near,
+      this.options.far
     );
-    this.instance.position.set(6, 4, 8);
     this.instance.name = "camera";
     this.scene.add(this.instance);
   }
 
+  applySavedSettings() {
+    const cameraPosition = JSON.parse(sessionStorage.getItem("cameraPosition"));
+    const cameraTarget = JSON.parse(sessionStorage.getItem("cameraTarget"));
+
+    if (cameraPosition) {
+      this.instance.position.set(
+        cameraPosition.x,
+        cameraPosition.y,
+        cameraPosition.z
+      );
+    } else {
+      this.instance.position.set(
+        this.options.position.x,
+        this.options.position.y,
+        this.options.position.z
+      );
+    }
+
+    if (cameraTarget) {
+      this.controls.target.set(cameraTarget.x, cameraTarget.y, cameraTarget.z);
+    } else {
+      this.controls.target.set(
+        this.options.target.x,
+        this.options.target.y,
+        this.options.target.z
+      );
+    }
+  }
+
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
-    this.controls.enableDamping = true;
+    this.controls.addEventListener("change", () => {
+      sessionStorage.setItem(
+        "cameraPosition",
+        JSON.stringify(this.instance.position)
+      );
+      sessionStorage.setItem(
+        "cameraTarget",
+        JSON.stringify(this.controls.target)
+      );
+    });
+  }
+  resetControls() {
+    sessionStorage.removeItem("cameraPosition");
+    sessionStorage.removeItem("cameraTarget");
+
+    this.controls.reset();
+    this.instance.position.set(
+      this.options.position.x,
+      this.options.position.y,
+      this.options.position.z
+    );
+    this.controls.target.set(
+      this.options.target.x,
+      this.options.target.y,
+      this.options.target.z
+    );
   }
 
   resize() {
@@ -43,12 +113,16 @@ export default class Camera {
     });
 
     this.debugFolder
+      .addButton({
+        title: "Reset",
+      })
+      .on("click", this.resetControls.bind(this));
+
+    this.debugFolder
       .addInput(this.controls, "enabled", {
         label: "Orbit Controls",
       })
-      .on("change", (value) => {
-        this.controls.reset();
-      });
+      .on("change", this.resetControls.bind(this));
   }
 
   update() {
