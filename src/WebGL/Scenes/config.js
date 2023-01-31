@@ -3,5 +3,5 @@ import SingleCube from "./SingleCube.js";
 
 export default {
   main: Main,
-  singlecube: SingleCube,
+  "single-cube": SingleCube,
 };
