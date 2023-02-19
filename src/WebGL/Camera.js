@@ -115,7 +115,7 @@ export default class Camera {
 
     this.debugFolder
       .addButton({
-        title: "Reset",
+        title: "Reset Camera",
       })
       .on("click", this.resetControls.bind(this));
 

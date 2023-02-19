@@ -14,8 +14,11 @@ export default class Debug {
       this.setPlugins();
       this.setImportExportButtons();
       this.setMoveEvent();
-      this.setSceneLog();
-      this.setStats();
+
+      this.setDebugManager();
+
+      if (this.debugParams.SceneLog) this.setSceneLog();
+      if (this.debugParams.Stats) this.setStats();
     }
   }
   setPlugins() {
@@ -25,7 +28,6 @@ export default class Debug {
   setImportExportButtons() {
     const handleExport = () => {
       const data = this.ui.exportPreset();
-      //download data preset
       const element = document.createElement("a");
       const file = new Blob([JSON.stringify(data)], {
         type: "application/json",
@@ -106,6 +108,42 @@ export default class Debug {
     titleElement.addEventListener("mouseup", handleMouseUp);
   }
 
+  setDebugManager() {
+    this.debugParams = {
+      SceneLog: true,
+      Stats: true,
+    };
+    this.debugParams =
+      JSON.parse(sessionStorage.getItem("debugParams")) || this.debugParams;
+
+    const debugManager = this.ui.addFolder({
+      title: "Debug Feature Manager",
+      expanded: false,
+    });
+
+    const handleReset = () => {
+      Object.keys(this.debugParams).forEach((key, index) => {
+        this.debugParams[key] = true;
+        debugManager.children[index + 1].refresh();
+      });
+    };
+
+    debugManager
+      .addButton({ title: "Reset Debug Manager" })
+      .on("click", handleReset);
+
+    Object.keys(this.debugParams).forEach((key) => {
+      debugManager.addInput(this.debugParams, key).on("change", ({ value }) => {
+        sessionStorage.setItem("debugParams", JSON.stringify(this.debugParams));
+        if (value) {
+          this[`set${key}`]();
+        } else {
+          if (this[`unset${key}`]) this[`unset${key}`]();
+        }
+      });
+    });
+  }
+
   setSceneLog() {
     // debug message when something is added to the scene
     this.experience.scene.add = (function (original) {
@@ -122,8 +160,8 @@ export default class Debug {
   }
 
   setStats() {
-    const statsJsPanel = new Stats();
-    document.body.appendChild(statsJsPanel.domElement);
+    this.statsJsPanel = new Stats();
+    document.body.appendChild(this.statsJsPanel.domElement);
     const monitoringValues = [
       {
         name: "Calls",
@@ -155,8 +193,8 @@ export default class Debug {
       },
     ];
 
-    const monitoringSection = document.createElement("section");
-    Object.assign(monitoringSection.style, {
+    this.monitoringSection = document.createElement("section");
+    Object.assign(this.monitoringSection.style, {
       position: "absolute",
       bottom: "1rem",
       left: "1rem",
@@ -172,15 +210,15 @@ export default class Debug {
       const monitoringValueElement = document.createElement("span");
       monitoringValueElement.id = monitoringValue.name.toLowerCase();
       monitoringValue.element = monitoringValueElement;
-      monitoringSection.appendChild(monitoringValueElement);
+      this.monitoringSection.appendChild(monitoringValueElement);
     });
 
-    document.body.appendChild(monitoringSection);
+    document.body.appendChild(this.monitoringSection);
 
     this.stats = {
       monitoringValues,
       update: () => {
-        statsJsPanel.update();
+        this.statsJsPanel.update();
         monitoringValues.forEach((monitoringValue) => {
           if (monitoringValue.value() === monitoringValue.lastValue) return;
           monitoringValue.lastValue = monitoringValue.value();
@@ -189,10 +227,14 @@ export default class Debug {
       },
     };
   }
+  unsetStats() {
+    this.statsJsPanel.domElement.remove();
+    this.monitoringSection.remove();
+  }
 
   update() {
     if (this.active) {
-      this.stats.update();
+      if (this.debugParams.Stats) this.stats.update();
     }
   }
 }
