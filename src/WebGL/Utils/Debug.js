@@ -21,6 +21,7 @@ export default class Debug {
       if (this.debugParams.Stats) this.setStats();
     }
   }
+
   setPlugins() {
     this.ui.registerPlugin(EssentialsPlugin);
   }
@@ -112,6 +113,7 @@ export default class Debug {
     this.debugParams = {
       SceneLog: true,
       Stats: true,
+      LoadingScreen: true,
     };
     this.debugParams =
       JSON.parse(sessionStorage.getItem("debugParams")) || this.debugParams;
@@ -136,7 +138,7 @@ export default class Debug {
       debugManager.addInput(this.debugParams, key).on("change", ({ value }) => {
         sessionStorage.setItem("debugParams", JSON.stringify(this.debugParams));
         if (value) {
-          this[`set${key}`]();
+          if (this[`set${key}`]) this[`set${key}`]();
         } else {
           if (this[`unset${key}`]) this[`unset${key}`]();
         }
