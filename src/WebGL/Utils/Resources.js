@@ -16,7 +16,7 @@ export default class Resources extends EventEmitter {
     this.toLoad = this.sources.length;
     this.loaded = 0;
 
-    if (this.debug.debugParams.LoadingScreen) this.setLoadingScreen();
+    if (this.debug.debugParams?.LoadingScreen) this.setLoadingScreen();
     this.setLoaders();
     this.startLoading();
   }
@@ -94,7 +94,7 @@ export default class Resources extends EventEmitter {
         `🖼️ ${source.name} loaded. (${this.loaded}/${this.toLoad})`
       );
 
-    if (this.debug.debugParams.LoadingScreen) {
+    if (this.debug.debugParams?.LoadingScreen) {
       this.loadingBarElement.style.transform = `scaleX(${
         this.loaded / this.toLoad
       })`;
@@ -102,7 +102,7 @@ export default class Resources extends EventEmitter {
 
     if (this.loaded === this.toLoad) {
       if (this.debug.active) console.debug("✅ Resources loaded!");
-      if (this.debug.debugParams.LoadingScreen)
+      if (this.debug.debugParams?.LoadingScreen)
         this.loadingScreenElement.remove();
       this.trigger("ready");
     }
