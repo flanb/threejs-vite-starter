@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "three": "^0.149.0"
+    "three": "^0.150.1"
   },
   "devDependencies": {
     "@tweakpane/plugin-essentials": "^0.1.8",
