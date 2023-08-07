@@ -120,7 +120,7 @@ export default class Camera {
       .on("click", this.resetControls.bind(this));
 
     this.debugFolder
-      .addInput(this.controls, "enabled", {
+      .addBinding(this.controls, "enabled", {
         label: "Orbit Controls",
       })
       .on("change", this.resetControls.bind(this));

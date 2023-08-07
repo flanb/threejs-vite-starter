@@ -34,28 +34,28 @@ export default class Environment {
 
     // Debug
     if (this.debug.active) {
-      this.debugFolder.addInput(this.sunLight, "intensity", {
+      this.debugFolder.addBinding(this.sunLight, "intensity", {
         min: 0,
         max: 10,
         step: 0.001,
         label: "sunLightIntensity",
       });
 
-      this.debugFolder.addInput(this.sunLight.position, "x", {
+      this.debugFolder.addBinding(this.sunLight.position, "x", {
         min: -5,
         max: 5,
         step: 0.001,
         label: "sunLightX",
       });
 
-      this.debugFolder.addInput(this.sunLight.position, "y", {
+      this.debugFolder.addBinding(this.sunLight.position, "y", {
         min: -5,
         max: 5,
         step: 0.001,
         label: "sunLightY",
       });
 
-      this.debugFolder.addInput(this.sunLight.position, "z", {
+      this.debugFolder.addBinding(this.sunLight.position, "z", {
         min: -5,
         max: 5,
         step: 0.001,
@@ -89,7 +89,7 @@ export default class Environment {
     // Debug
     if (this.debug.active) {
       this.debugFolder
-        .addInput(this.environmentMap, "intensity", {
+        .addBinding(this.environmentMap, "intensity", {
           min: 0,
           max: 4,
           step: 0.001,

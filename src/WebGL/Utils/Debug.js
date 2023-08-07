@@ -23,12 +23,12 @@ export default class Debug {
   }
 
   setPlugins() {
-    this.ui.registerPlugin(EssentialsPlugin);
+    // this.ui.registerPlugin(EssentialsPlugin);
   }
 
   setImportExportButtons() {
     const handleExport = () => {
-      const data = this.ui.exportPreset();
+      const data = this.ui.exportState();
       const element = document.createElement("a");
       const file = new Blob([JSON.stringify(data)], {
         type: "application/json",
@@ -49,28 +49,30 @@ export default class Debug {
         const reader = new FileReader();
         reader.onload = (event) => {
           const data = JSON.parse(event.target.result);
-          this.ui.importPreset(data);
+          this.ui.importState(data);
         };
         reader.readAsText(file);
       };
       input.click();
     };
 
-    this.ui
-      .addBlade({
-        view: "buttongrid",
-        size: [2, 1],
-        cells: (x, y) => ({
-          title: [["Import", "Export"]][y][x],
-        }),
-      })
-      .on("click", (event) => {
-        if (event.index[0] === 0) {
-          handleImport();
-          return;
-        }
-        handleExport();
-      });
+    // this.ui
+    //   .addBlade({
+    //     view: "buttongrid",
+    //     size: [2, 1],
+    //     cells: (x, y) => ({
+    //       title: [["Import", "Export"]][y][x],
+    //     }),
+    //   })
+    //   .on("click", (event) => {
+    //     if (event.index[0] === 0) {
+    //       handleImport();
+    //       return;
+    //     }
+    //     handleExport();
+    //   });
+    this.ui.addButton({ title: "Export" }).on("click", handleExport);
+    this.ui.addButton({ title: "Import" }).on("click", handleImport);
   }
 
   setMoveEvent() {
@@ -135,14 +137,19 @@ export default class Debug {
       .on("click", handleReset);
 
     Object.keys(this.debugParams).forEach((key) => {
-      debugManager.addInput(this.debugParams, key).on("change", ({ value }) => {
-        sessionStorage.setItem("debugParams", JSON.stringify(this.debugParams));
-        if (value) {
-          if (this[`set${key}`]) this[`set${key}`]();
-        } else {
-          if (this[`unset${key}`]) this[`unset${key}`]();
-        }
-      });
+      debugManager
+        .addBinding(this.debugParams, key)
+        .on("change", ({ value }) => {
+          sessionStorage.setItem(
+            "debugParams",
+            JSON.stringify(this.debugParams)
+          );
+          if (value) {
+            if (this[`set${key}`]) this[`set${key}`]();
+          } else {
+            if (this[`unset${key}`]) this[`unset${key}`]();
+          }
+        });
     });
   }
 
