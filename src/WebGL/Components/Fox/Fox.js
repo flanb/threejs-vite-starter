@@ -118,6 +118,6 @@ export default class Fox {
   }
 
   update() {
-    this.animation.mixer.update(this.time.delta * 0.001);
+    if (this.animation) this.animation.mixer.update(this.time.delta * 0.001);
   }
 }
