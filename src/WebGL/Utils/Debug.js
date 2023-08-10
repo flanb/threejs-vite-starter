@@ -77,6 +77,7 @@ export default class Debug {
 
   setMoveEvent() {
     const container = this.ui.containerElem_;
+    container.style.position = "fixed";
     const titleElement = this.ui.element.children[0];
     titleElement.childNodes.forEach((child) => {
       child.style.pointerEvents = "none";
@@ -204,11 +205,10 @@ export default class Debug {
 
     this.monitoringSection = document.createElement("section");
     Object.assign(this.monitoringSection.style, {
-      position: "absolute",
+      position: "fixed",
       bottom: "1rem",
       left: "1rem",
       pointerEvents: "none",
-      color: "white",
       zIndex: "1000",
       display: "flex",
       gap: "1rem",
