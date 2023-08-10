@@ -6,17 +6,20 @@ import {
   RepeatWrapping,
   SRGBColorSpace,
 } from "three";
+import addMaterialDebug from "utils/addMaterialDebug.js";
 
 export default class Floor {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
+    this.debug = this.experience.debug;
 
     this.setGeometry();
     this.setTextures();
     this.setMaterial();
     this.setMesh();
+    this.setDebug();
   }
 
   setGeometry() {
@@ -42,6 +45,7 @@ export default class Floor {
     this.material = new MeshStandardMaterial({
       map: this.textures.color,
       normalMap: this.textures.normal,
+      name: "floorMaterial",
     });
   }
 
@@ -51,5 +55,15 @@ export default class Floor {
     this.mesh.receiveShadow = true;
     this.mesh.name = "floor";
     this.scene.add(this.mesh);
+  }
+
+  setDebug() {
+    if (this.debug.active) {
+      const debugFolder = this.debug.ui.addFolder({
+        title: "floor",
+        expanded: false,
+      });
+      addMaterialDebug(debugFolder, this.material);
+    }
   }
 }
