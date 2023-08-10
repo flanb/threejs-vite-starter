@@ -19,6 +19,8 @@ export default class Debug {
 
       if (this.debugParams.SceneLog) this.setSceneLog();
       if (this.debugParams.Stats) this.setStats();
+    } else {
+      sessionStorage.removeItem("debugParams");
     }
   }
 

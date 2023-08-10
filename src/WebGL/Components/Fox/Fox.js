@@ -14,6 +14,7 @@ export default class Fox {
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder({
         title: "fox",
+        expanded: false,
       });
     }
 
