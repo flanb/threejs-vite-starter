@@ -2,7 +2,7 @@ import Experience from "./Experience.js";
 import {
   CineonToneMapping,
   PCFSoftShadowMap,
-  sRGBEncoding,
+  SRGBColorSpace,
   WebGLRenderer,
 } from "three";
 
@@ -22,8 +22,7 @@ export default class Renderer {
       canvas: this.canvas,
       powerPreference: "high-performance",
     });
-    this.instance.physicallyCorrectLights = true;
-    this.instance.outputEncoding = sRGBEncoding;
+    this.instance.outputColorSpace = SRGBColorSpace;
     this.instance.toneMapping = CineonToneMapping;
     this.instance.toneMappingExposure = 1.75;
     this.instance.shadowMap.enabled = true;

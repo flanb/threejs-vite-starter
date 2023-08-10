@@ -4,7 +4,7 @@ import {
   Mesh,
   MeshStandardMaterial,
   RepeatWrapping,
-  sRGBEncoding,
+  SRGBColorSpace,
 } from "three";
 
 export default class Floor {
@@ -27,7 +27,7 @@ export default class Floor {
     this.textures = {};
 
     this.textures.color = this.resources.items.grassColorTexture;
-    this.textures.color.encoding = sRGBEncoding;
+    this.textures.color.colorSpace = SRGBColorSpace;
     this.textures.color.repeat.set(1.5, 1.5);
     this.textures.color.wrapS = RepeatWrapping;
     this.textures.color.wrapT = RepeatWrapping;
