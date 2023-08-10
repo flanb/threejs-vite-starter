@@ -5,7 +5,7 @@ import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 import Resources from "utils/Resources.js";
 import SceneManager from "utils/SceneManager.js";
-import sources from "./sources.js";
+import sources from "./sources.json";
 import { Mesh, Scene } from "three";
 
 let instance = null;
