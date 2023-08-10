@@ -3,7 +3,7 @@ import {
   DirectionalLight,
   Mesh,
   MeshStandardMaterial,
-  sRGBEncoding,
+  SRGBColorSpace,
 } from "three";
 
 export default class Environment {
@@ -68,7 +68,7 @@ export default class Environment {
     this.environmentMap = {};
     this.environmentMap.intensity = 0.4;
     this.environmentMap.texture = this.resources.items.environmentMapTexture;
-    this.environmentMap.texture.encoding = sRGBEncoding;
+    this.environmentMap.texture.colorSpace = SRGBColorSpace;
 
     this.scene.environment = this.environmentMap.texture;
 

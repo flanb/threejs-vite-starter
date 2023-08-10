@@ -1,7 +1,8 @@
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import EventEmitter from "./EventEmitter.js";
 import { CubeTextureLoader, TextureLoader } from "three";
 import Experience from "webgl/Experience.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 export default class Resources extends EventEmitter {
   constructor(sources) {
@@ -54,6 +55,9 @@ export default class Resources extends EventEmitter {
   setLoaders() {
     this.loaders = {};
     this.loaders.gltfLoader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/draco/");
+    this.loaders.gltfLoader.setDRACOLoader(dracoLoader);
     this.loaders.textureLoader = new TextureLoader();
     this.loaders.cubeTextureLoader = new CubeTextureLoader();
   }
