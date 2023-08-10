@@ -63,9 +63,13 @@ export default class Resources extends EventEmitter {
   }
 
   startLoading() {
-    if (this.debug.active) console.debug("⏳ Loading resources...");
+    if (this.debug.active) {
+      console.debug("⏳ Loading resources...");
+      this.totalStartTime = performance.now();
+    }
     // Load each source
     for (const source of this.sources) {
+      source.startTime = performance.now();
       switch (source.type) {
         case "gltf":
           this.loaders.gltfLoader.load(source.path, (file) => {
@@ -92,10 +96,12 @@ export default class Resources extends EventEmitter {
   sourceLoaded(source, file) {
     this.items[source.name] = file;
     this.loaded++;
+    source.endTime = performance.now();
+    source.loadTime = source.endTime - source.startTime;
 
     if (this.debug.active)
       console.debug(
-        `🖼️ ${source.name} loaded. (${this.loaded}/${this.toLoad})`
+        `🖼️ ${source.name} loaded in ${source.loadTime}ms. (${this.loaded}/${this.toLoad})`
       );
 
     if (this.debug.debugParams?.LoadingScreen) {
@@ -105,7 +111,11 @@ export default class Resources extends EventEmitter {
     }
 
     if (this.loaded === this.toLoad) {
-      if (this.debug.active) console.debug("✅ Resources loaded!");
+      if (this.debug.active) {
+        const totalEndTime = performance.now();
+        const totalLoadTime = totalEndTime - this.totalStartTime;
+        console.debug(`✅ Resources loaded in ${totalLoadTime}ms!`);
+      }
       if (this.debug.debugParams?.LoadingScreen)
         this.loadingScreenElement.remove();
       this.trigger("ready");
