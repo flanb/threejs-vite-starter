@@ -29,6 +29,7 @@ const materialParams = {
   ior: { type: "number", min: 0, max: 2.333, step: 0.01 },
   reflectivity: { type: "number", min: 0, max: 1, step: 0.01 },
   opacity: { type: "number", min: 0, max: 1, step: 0.01 },
+  transparent: { type: "boolean" },
   side: {
     type: "list",
     options: [
@@ -95,7 +96,7 @@ const materialParams = {
   // refractionRatio: { type: "number" },
 };
 
-const isMaterialKeyValid = function (value, params, state) {
+const isMaterialKeyValid = (value, params, state) => {
   const mandatory = params.optional === false || params.optional === undefined;
   const falsy = value === undefined || value === null || value === false;
   const conditionValid =
@@ -111,14 +112,12 @@ const isMaterialKeyValid = function (value, params, state) {
   return (mandatory || !falsy) && conditionValid;
 };
 
-const addMaterialDebug = function (collection, material, options = {}) {
+const addMaterialDebug = function (folder, material, options = {}) {
   const materialKeys = Object.keys(materialParams);
-  const title = options.title
-    ? options.title
-    : material.name
-    ? material.name
-    : material.uuid;
-  const gui = collection.addFolder({
+  const title =
+    options.title || material?.name || material?.uuid || "Unknow material";
+
+  const gui = folder.addFolder({
     title,
     expanded: options.expanded || false,
   });
@@ -131,6 +130,7 @@ const addMaterialDebug = function (collection, material, options = {}) {
       if (materialOption.type === "image") {
         const param = material[key];
         const image = param.image;
+        if (!image.src) return;
         const localState = { url: image.src };
 
         let repeat;
@@ -187,10 +187,14 @@ const addMaterialDebug = function (collection, material, options = {}) {
             material.needsUpdate = true;
           });
       } else if (material[key] !== undefined) {
-        gui.addBinding(material, key, {
-          ...materialOption,
-          label: materialOption.name || key,
-        });
+        gui
+          .addBinding(material, key, {
+            ...materialOption,
+            label: materialOption.name || key,
+          })
+          .on("change", () => {
+            material.needsUpdate = true;
+          });
       }
     }
   });

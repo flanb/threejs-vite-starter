@@ -158,12 +158,14 @@ export default class Debug {
     // debug message when something is added to the scene
     this.experience.scene.add = (function (original) {
       return function (object) {
-        console.debug(
-          `📦 ${
-            object.name ? object.name : `unnamed ${object.type}`
-          } added to the scene`,
-          object
-        );
+        if (object.name !== "transformControls") {
+          console.debug(
+            `📦 ${
+              object.name ? object.name : `unnamed ${object.type}`
+            } added to the scene`,
+            object
+          );
+        }
         return original.apply(this, arguments);
       };
     })(this.experience.scene.add);

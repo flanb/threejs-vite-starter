@@ -5,6 +5,7 @@ import {
   MeshStandardMaterial,
   SRGBColorSpace,
 } from "three";
+import addMeshDebug from "utils/addMeshDebug.js";
 
 export default class Environment {
   constructor() {
@@ -15,7 +16,7 @@ export default class Environment {
 
     // Debug
     if (this.debug.active) {
-      this.debugFolder = this.debug.ui.addFolder({
+      this.environmentDebugFolder = this.debug.ui.addFolder({
         title: "environment",
         expanded: false,
       });
@@ -37,32 +38,16 @@ export default class Environment {
 
     // Debug
     if (this.debug.active) {
-      this.debugFolder.addBinding(this.sunLight, "intensity", {
+      const debugFolder = addMeshDebug(
+        this.environmentDebugFolder,
+        this.sunLight
+      );
+
+      debugFolder.addBinding(this.sunLight, "intensity", {
         min: 0,
         max: 10,
         step: 0.001,
-        label: "sunLightIntensity",
-      });
-
-      this.debugFolder.addBinding(this.sunLight.position, "x", {
-        min: -5,
-        max: 5,
-        step: 0.001,
-        label: "sunLightX",
-      });
-
-      this.debugFolder.addBinding(this.sunLight.position, "y", {
-        min: -5,
-        max: 5,
-        step: 0.001,
-        label: "sunLightY",
-      });
-
-      this.debugFolder.addBinding(this.sunLight.position, "z", {
-        min: -5,
-        max: 5,
-        step: 0.001,
-        label: "sunLightZ",
+        label: "intensity",
       });
     }
   }
@@ -91,7 +76,7 @@ export default class Environment {
 
     // Debug
     if (this.debug.active) {
-      this.debugFolder
+      this.environmentDebugFolder
         .addBinding(this.environmentMap, "intensity", {
           min: 0,
           max: 4,

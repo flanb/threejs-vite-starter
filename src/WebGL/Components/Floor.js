@@ -6,7 +6,7 @@ import {
   RepeatWrapping,
   SRGBColorSpace,
 } from "three";
-import addMaterialDebug from "utils/addMaterialDebug.js";
+import addMeshDebug from "utils/addMeshDebug.js";
 
 export default class Floor {
   constructor() {
@@ -19,7 +19,7 @@ export default class Floor {
     this.setTextures();
     this.setMaterial();
     this.setMesh();
-    this.setDebug();
+    if (this.debug.active) this.setDebug();
   }
 
   setGeometry() {
@@ -58,12 +58,6 @@ export default class Floor {
   }
 
   setDebug() {
-    if (this.debug.active) {
-      const debugFolder = this.debug.ui.addFolder({
-        title: "floor",
-        expanded: false,
-      });
-      addMaterialDebug(debugFolder, this.material);
-    }
+    addMeshDebug(this.debug.ui, this.mesh);
   }
 }
