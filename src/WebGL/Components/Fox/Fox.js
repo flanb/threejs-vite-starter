@@ -1,6 +1,8 @@
 import Experience from "webgl/Experience.js";
 import { AnimationMixer, Mesh } from "three";
 import InputManager from "utils/InputManager.js";
+import addMeshDebug from "utils/addMeshDebug.js";
+import addMaterialDebug from "utils/addMaterialDebug.js";
 
 export default class Fox {
   constructor() {
@@ -10,20 +12,13 @@ export default class Fox {
     this.debug = this.experience.debug;
     this.time = this.experience.time;
 
-    // Debug
-    if (this.debug.active) {
-      this.debugFolder = this.debug.ui.addFolder({
-        title: "fox",
-        expanded: false,
-      });
-    }
-
     // Resource
     this.resource = this.resources.items.foxModel;
 
     this.setModel();
     this.setAnimation();
     this.setInputs();
+    if (this.debug.active) this.setDebug();
   }
 
   setModel() {
@@ -72,30 +67,6 @@ export default class Fox {
 
       this.animation.actions.current = newAction;
     };
-
-    // Debug
-    if (this.debug.active) {
-      const debugObject = {
-        playIdle: () => {
-          this.animation.play("idle");
-        },
-        playWalking: () => {
-          this.animation.play("walking");
-        },
-        playRunning: () => {
-          this.animation.play("running");
-        },
-      };
-      this.debugFolder
-        .addButton({ title: "playIdle", label: "playIdle" })
-        .on("click", debugObject.playIdle);
-      this.debugFolder
-        .addButton({ title: "playWalking", label: "playWalking" })
-        .on("click", debugObject.playWalking);
-      this.debugFolder
-        .addButton({ title: "playRunning", label: "playRunning" })
-        .on("click", debugObject.playRunning);
-    }
   }
 
   setInputs() {
@@ -120,5 +91,31 @@ export default class Fox {
 
   update() {
     if (this.animation) this.animation.mixer.update(this.time.delta * 0.001);
+  }
+
+  setDebug() {
+    const debugFolder = addMeshDebug(this.debug.ui, this.model);
+    const debugObject = {
+      playIdle: () => {
+        this.animation.play("idle");
+      },
+      playWalking: () => {
+        this.animation.play("walking");
+      },
+      playRunning: () => {
+        this.animation.play("running");
+      },
+    };
+    debugFolder
+      .addButton({ title: "playIdle", label: "playIdle" })
+      .on("click", debugObject.playIdle);
+    debugFolder
+      .addButton({ title: "playWalking", label: "playWalking" })
+      .on("click", debugObject.playWalking);
+    debugFolder
+      .addButton({ title: "playRunning", label: "playRunning" })
+      .on("click", debugObject.playRunning);
+
+    addMaterialDebug(debugFolder, this.model.children[0].children[0].material);
   }
 }

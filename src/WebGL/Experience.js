@@ -29,8 +29,8 @@ export default class Experience {
     this.time = new Time();
     this.scene = new Scene();
     this.debug = new Debug();
-    this.resources = new Resources(sources);
     this.camera = new Camera();
+    this.resources = new Resources(sources);
     this.renderer = new Renderer();
     this.activeScene = new SceneManager();
 

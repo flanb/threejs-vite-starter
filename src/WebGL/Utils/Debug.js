@@ -10,6 +10,13 @@ export default class Debug {
 
     if (this.active) {
       this.ui = new Pane({ title: "⚙️ Debug" });
+      const uiContainer = this.ui.containerElem_;
+      const uiBindContainer = uiContainer.querySelector(
+        "[style='height: auto;']"
+      );
+      uiContainer.style.position = "fixed";
+      uiBindContainer.style.maxHeight = "80vh";
+      uiBindContainer.style.overflowY = "auto";
 
       this.setPlugins();
       this.setImportExportButtons();
@@ -77,11 +84,11 @@ export default class Debug {
 
   setMoveEvent() {
     const container = this.ui.containerElem_;
-    container.style.position = "fixed";
     const titleElement = this.ui.element.children[0];
     titleElement.childNodes.forEach((child) => {
       child.style.pointerEvents = "none";
     });
+    // console.log(this.ui.element.children[2]);
 
     let move = () => {};
     const handleMouseDown = (event) => {
@@ -158,12 +165,14 @@ export default class Debug {
     // debug message when something is added to the scene
     this.experience.scene.add = (function (original) {
       return function (object) {
-        console.debug(
-          `📦 ${
-            object.name ? object.name : `unnamed ${object.type}`
-          } added to the scene`,
-          object
-        );
+        if (object.name !== "transformControls") {
+          console.debug(
+            `📦 ${
+              object.name ? object.name : `unnamed ${object.type}`
+            } added to the scene`,
+            object
+          );
+        }
         return original.apply(this, arguments);
       };
     })(this.experience.scene.add);
