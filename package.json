@@ -10,10 +10,12 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"three": "^0.157.0"
+		"three": "^0.158.0"
 	},
 	"devDependencies": {
+		"@tweakpane/core": "^2.0.1",
 		"@tweakpane/plugin-essentials": "0.2.0",
+		"@types/three": "^0.158.1",
 		"stats.js": "^0.17.0",
 		"tweakpane": "^4.0.1",
 		"vite": "^4.5.0",
