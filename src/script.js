@@ -1,3 +1,3 @@
-import Experience from "webgl/Experience";
+import Experience from 'webgl/Experience'
 
-const experience = new Experience(document.querySelector("canvas#webgl"));
+const experience = new Experience(document.querySelector('canvas#webgl'))

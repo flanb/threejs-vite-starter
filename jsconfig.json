@@ -1,27 +1,13 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "webgl/*": [
-        "./src/WebGL/*"
-      ],
-      "components/*": [
-        "./src/WebGL/Components/*"
-      ],
-      "utils/*": [
-        "./src/WebGL/Utils/*"
-      ],
-      "scenes/*": [
-        "./src/WebGL/Scenes/*"
-      ]
-    }
-  },
-  "exclude": [
-    "node_modules",
-    "public",
-    "dist"
-  ]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"webgl/*": ["./src/WebGL/*"],
+			"components/*": ["./src/WebGL/Components/*"],
+			"utils/*": ["./src/WebGL/Utils/*"],
+			"scenes/*": ["./src/WebGL/Scenes/*"]
+		}
+	},
+	"exclude": ["node_modules", "public", "dist"]
 }
