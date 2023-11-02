@@ -103,7 +103,5 @@ export default class Fox {
 		debugFolder.addButton({ title: 'playIdle', label: 'playIdle' }).on('click', debugObject.playIdle)
 		debugFolder.addButton({ title: 'playWalking', label: 'playWalking' }).on('click', debugObject.playWalking)
 		debugFolder.addButton({ title: 'playRunning', label: 'playRunning' }).on('click', debugObject.playRunning)
-
-		addMaterialDebug(debugFolder, this.model.children[0].children[0].material)
 	}
 }

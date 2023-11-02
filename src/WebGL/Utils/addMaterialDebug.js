@@ -13,13 +13,15 @@ import {
 	Texture,
 	UVMapping,
 	Vector2,
+	Material,
 } from 'three'
+import { FolderApi } from '@tweakpane/core'
 
 const materialParams = {
 	wireframe: { type: 'boolean' },
 	flatShading: { type: 'boolean' },
 	color: { type: 'color', color: { type: 'float' } },
-	emissive: { type: 'color', color: { type: 'float' }, optional: true },
+	emissive: { type: 'color', color: { type: 'float' } },
 	roughness: { type: 'number', min: 0, max: 1, step: 0.01 },
 	metalness: { type: 'number', min: 0, max: 1, step: 0.01 },
 	transmission: { type: 'number', min: 0, max: 1, step: 0.01 },
@@ -72,18 +74,18 @@ const materialParams = {
 		condition: 'displacementMap',
 	},
 
-	map: { type: 'image', optional: true },
-	metalnessMap: { type: 'image', optional: true },
-	normalMap: { type: 'image', optional: true },
-	bumpMap: { type: 'image', optional: true },
-	roughnessMap: { type: 'image', optional: true },
-	alphaMap: { type: 'image', optional: true },
-	envMap: { type: 'image', optional: true },
-	displacementMap: { type: 'image', optional: true },
-	matcap: { type: 'image', optional: true },
-	aoMap: { type: 'image', optional: true },
-	emissiveMap: { type: 'image', optional: true },
-	lightMap: { type: 'image', optional: true },
+	map: { type: 'image' },
+	metalnessMap: { type: 'image' },
+	normalMap: { type: 'image' },
+	bumpMap: { type: 'image' },
+	roughnessMap: { type: 'image' },
+	alphaMap: { type: 'image' },
+	envMap: { type: 'image' },
+	displacementMap: { type: 'image' },
+	matcap: { type: 'image' },
+	aoMap: { type: 'image' },
+	emissiveMap: { type: 'image' },
+	lightMap: { type: 'image' },
 	aoMapIntensity: { type: 'number', condition: 'aoMap', min: 0, max: 2 },
 	envMapIntensity: { type: 'number', condition: 'envMap', min: 0, max: 2 },
 	lightMapIntensity: { type: 'number', condition: 'lightMap' },
@@ -93,24 +95,17 @@ const materialParams = {
 		min: 0,
 		max: 2,
 	},
-	// refractionRatio: { type: "number" },
 }
 
-const isMaterialKeyValid = (value, params, state) => {
-	const mandatory = params.optional === false || params.optional === undefined
-	const falsy = value === undefined || value === null || value === false
-	const conditionValid =
-		!params.condition ||
-		(params.condition &&
-			state[params.condition] &&
-			isMaterialKeyValid(state[params.condition], materialParams[params.condition], state))
-
-	return (mandatory || !falsy) && conditionValid
-}
-
-const addMaterialDebug = function (folder, material, options = {}) {
+/**
+ * Adds debugging functionality to a given 3D material within a folder interface.
+ * @param {FolderApi} folder
+ * @param {Material} material
+ * @param {{ title?: string, expanded?: boolean }} options
+ */
+export default function addMaterialDebug(folder, material, options = {}) {
 	const materialKeys = Object.keys(materialParams)
-	const title = options.title || material?.name || material?.uuid || 'Unknow material'
+	const title = options.title || material?.name || material?.uuid || 'Unknown material'
 
 	const gui = folder.addFolder({
 		title,
@@ -121,73 +116,81 @@ const addMaterialDebug = function (folder, material, options = {}) {
 		const keyValue = material[key]
 		const materialOption = materialParams[key]
 
-		if (isMaterialKeyValid(keyValue, materialOption, material)) {
-			if (materialOption.type === 'image') {
-				const param = material[key]
-				const image = param.image
-				if (!image.src) return
-				const localState = { url: image.src }
+		if (!(keyValue == null || materialOption.condition)) {
+			switch (materialOption.type) {
+				case 'image': {
+					//FIXME: update image tweakpane plugin
+					const param = material[key]
+					const image = param.image
+					if (!image.src) return
+					const localState = { url: image.src }
+					let repeat
 
-				let repeat
-				if (param.repeat) {
-					repeat = new Vector2().copy(param.repeat)
+					if (param.repeat) {
+						repeat = new Vector2().copy(param.repeat)
+					}
+
+					gui
+						.addBinding(localState, 'url', {
+							view: 'input-image',
+							imageFit: 'cover',
+							label: key,
+							extensions: ['jpg', 'png', 'gif', 'webp'],
+						})
+						.on('change', ({ value }) => {
+							const imageElement = new Image()
+							imageElement.src = value.src
+							imageElement.addEventListener('load', () => {
+								const texture = new Texture(imageElement, UVMapping, ClampToEdgeWrapping, ClampToEdgeWrapping)
+								if (repeat) {
+									texture.repeat.copy(repeat)
+								}
+
+								if (key === 'envMap') {
+									texture.mapping = EquirectangularReflectionMapping
+								}
+
+								texture.needsUpdate = true
+								material[key] = texture
+								material.needsUpdate = true
+							})
+						})
+					break
 				}
-				gui
-					.addBinding(localState, 'url', {
-						view: 'input-image',
-						imageFit: 'cover',
-						label: key,
-						extensions: ['jpg', 'png', 'gif', 'webp'],
-					})
-					.on('change', ({ value }) => {
-						const imageElement = new Image()
-						imageElement.src = value.src
-						imageElement.addEventListener('load', () => {
-							const texture = new Texture(imageElement, UVMapping, ClampToEdgeWrapping, ClampToEdgeWrapping)
-							if (repeat) {
-								texture.repeat.copy(repeat)
-							}
+				case 'list': {
+					const options =
+						typeof materialOption.options[0] === 'object'
+							? materialOption.options
+							: materialOption.options.map((v) => ({
+									value: v.toString(),
+									text: v.toString(),
+							  }))
 
-							if (key === 'envMap') {
-								texture.mapping = EquirectangularReflectionMapping
-							}
-							texture.needsUpdate = true
-							material[key] = texture
+					gui
+						.addBlade({
+							view: 'list',
+							label: materialOption.name || key,
+							options,
+							value: keyValue.toString(),
+						})
+						.on('change', ({ value }) => {
+							material[key] = parseInt(value)
 							material.needsUpdate = true
 						})
-					})
-			} else if (materialOption.type === 'list') {
-				const options =
-					typeof materialOption.options[0] === 'object'
-						? materialOption.options
-						: materialOption.options.map((v) => ({
-								value: v.toString(),
-								text: v.toString(),
-						  }))
-
-				gui
-					.addBlade({
-						view: 'list',
-						label: materialOption.name || key,
-						options,
-						value: keyValue.toString(),
-					})
-					.on('change', ({ value }) => {
-						material[key] = parseInt(value)
-						material.needsUpdate = true
-					})
-			} else if (material[key] !== undefined) {
-				gui
-					.addBinding(material, key, {
-						...materialOption,
-						label: materialOption.name || key,
-					})
-					.on('change', () => {
-						material.needsUpdate = true
-					})
+					break
+				}
+				default: {
+					gui
+						.addBinding(material, key, {
+							...materialOption,
+							label: materialOption.name || key,
+						})
+						.on('change', () => {
+							material.needsUpdate = true
+						})
+					break
+				}
 			}
 		}
 	})
 }
-
-export default addMaterialDebug
