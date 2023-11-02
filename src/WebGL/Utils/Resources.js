@@ -13,6 +13,9 @@ export default class Resources extends EventEmitter {
 
     this.sources = sources;
 
+    /**
+     * @type {{[name: string]: Texture | CubeTexture | Object3D}}
+     */
     this.items = {};
     this.toLoad = this.sources.length;
     this.loaded = 0;
