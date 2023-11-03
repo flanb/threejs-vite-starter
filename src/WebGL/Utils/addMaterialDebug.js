@@ -1,19 +1,15 @@
 import {
 	AdditiveBlending,
 	BackSide,
-	ClampToEdgeWrapping,
 	CustomBlending,
 	DoubleSide,
-	EquirectangularReflectionMapping,
 	FrontSide,
+	Material,
 	MultiplyBlending,
 	NoBlending,
 	NormalBlending,
 	SubtractiveBlending,
 	Texture,
-	UVMapping,
-	Vector2,
-	Material,
 } from 'three'
 import { FolderApi } from '@tweakpane/core'
 
@@ -116,44 +112,32 @@ export default function addMaterialDebug(folder, material, options = {}) {
 		const keyValue = material[key]
 		const materialOption = materialParams[key]
 
+		console.log(materialOption)
 		if (!(keyValue == null || materialOption.condition)) {
 			switch (materialOption.type) {
 				case 'image': {
-					//FIXME: update image tweakpane plugin
-					const param = material[key]
-					const image = param.image
-					if (!image.src) return
-					const localState = { url: image.src }
-					let repeat
-
-					if (param.repeat) {
-						repeat = new Vector2().copy(param.repeat)
+					let image = keyValue.image
+					if (keyValue.image instanceof ImageBitmap) {
+						const canvas = document.createElement('canvas')
+						const ctx = canvas.getContext('2d')
+						canvas.width = keyValue.image.width
+						canvas.height = keyValue.image.height
+						ctx.drawImage(keyValue.image, 0, 0)
+						const bitmapImageElement = new Image()
+						bitmapImageElement.src = canvas.toDataURL()
+						image = bitmapImageElement
+						canvas.remove()
 					}
 
+					if (!image.src) return
 					gui
-						.addBinding(localState, 'url', {
-							view: 'input-image',
-							imageFit: 'cover',
+						.addBinding({ image }, 'image', {
+							view: 'image',
 							label: key,
-							extensions: ['jpg', 'png', 'gif', 'webp'],
 						})
 						.on('change', ({ value }) => {
-							const imageElement = new Image()
-							imageElement.src = value.src
-							imageElement.addEventListener('load', () => {
-								const texture = new Texture(imageElement, UVMapping, ClampToEdgeWrapping, ClampToEdgeWrapping)
-								if (repeat) {
-									texture.repeat.copy(repeat)
-								}
-
-								if (key === 'envMap') {
-									texture.mapping = EquirectangularReflectionMapping
-								}
-
-								texture.needsUpdate = true
-								material[key] = texture
-								material.needsUpdate = true
-							})
+							material[key] = new Texture(value)
+							material[key].needsUpdate = true
 						})
 					break
 				}
