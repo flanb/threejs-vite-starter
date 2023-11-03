@@ -2,7 +2,6 @@ import Experience from 'webgl/Experience.js'
 import { AnimationMixer, Mesh } from 'three'
 import InputManager from 'utils/InputManager.js'
 import addMeshDebug from 'utils/addMeshDebug.js'
-import addMaterialDebug from 'utils/addMaterialDebug.js'
 
 export default class Fox {
 	constructor() {
