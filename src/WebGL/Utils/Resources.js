@@ -3,6 +3,7 @@ import { CubeTextureLoader, TextureLoader } from 'three'
 import Experience from 'webgl/Experience.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { Texture, CubeTexture, Object3D } from 'three'
 
 export default class Resources extends EventEmitter {
 	constructor(sources) {
@@ -20,7 +21,7 @@ export default class Resources extends EventEmitter {
 		this.toLoad = this.sources.length
 		this.loaded = 0
 
-		if (!this.debug.active || this.debug.debugParams?.LoadingScreen) {
+		if (!this.debug.active || this.debug.debugParams.LoadingScreen) {
 			this.setLoadingScreen()
 		}
 		this.setLoaders()
@@ -68,7 +69,7 @@ export default class Resources extends EventEmitter {
 	}
 
 	startLoading() {
-		if (this.debug.active) {
+		if (this.debug.active && this.debug.debugParams.ResourceLog) {
 			console.debug('⏳ Loading resources...')
 			this.totalStartTime = performance.now()
 		}
@@ -104,7 +105,7 @@ export default class Resources extends EventEmitter {
 		source.endTime = performance.now()
 		source.loadTime = source.endTime - source.startTime
 
-		if (this.debug.active)
+		if (this.debug.active && this.debug.debugParams.ResourceLog)
 			console.debug(`🖼️ ${source.name} loaded in ${source.loadTime}ms. (${this.loaded}/${this.toLoad})`)
 
 		if (this.loadingScreenElement) {
@@ -112,7 +113,7 @@ export default class Resources extends EventEmitter {
 		}
 
 		if (this.loaded === this.toLoad) {
-			if (this.debug.active) {
+			if (this.debug.active && this.debug.debugParams.ResourceLog) {
 				const totalEndTime = performance.now()
 				const totalLoadTime = totalEndTime - this.totalStartTime
 				console.debug(`✅ Resources loaded in ${totalLoadTime}ms!`)

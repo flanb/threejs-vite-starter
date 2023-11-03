@@ -118,6 +118,7 @@ export default class Debug {
 	setDebugManager() {
 		this.debugParams = {
 			SceneLog: true,
+			ResourceLog: true,
 			Stats: true,
 			LoadingScreen: true,
 		}
