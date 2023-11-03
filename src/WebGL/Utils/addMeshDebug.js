@@ -96,7 +96,7 @@ export default function addMeshDebug(folder, mesh, options = {}) {
 	mesh.traverse((child) => {
 		if (child.material) {
 			addMaterialDebug(debugFolder, child.material, {
-				title: child.name ? child.name : child.uuid.slice(0, 8),
+				title: child.material.name || `${child.name}Material(${child.material.uuid.slice(0, 8)})`,
 			})
 		}
 	})
