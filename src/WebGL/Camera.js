@@ -1,6 +1,6 @@
 import Experience from './Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { PerspectiveCamera } from 'three'
+import { PerspectiveCamera, Vector3 } from 'three'
 
 export default class Camera {
 	constructor() {
@@ -14,16 +14,8 @@ export default class Camera {
 			fov: 35,
 			near: 1,
 			far: 100,
-			position: {
-				x: 6,
-				y: 4,
-				z: 8,
-			},
-			target: {
-				x: 0,
-				y: 0,
-				z: 0,
-			},
+			position: new Vector3(6, 4, 8),
+			target: new Vector3(0, 0, 0),
 		}
 
 		this.setInstance()
@@ -39,6 +31,8 @@ export default class Camera {
 			this.options.near,
 			this.options.far,
 		)
+		this.instance.position.copy(this.options.position)
+		this.instance.lookAt(this.options.target)
 		this.instance.name = 'camera'
 		this.scene.add(this.instance)
 	}
@@ -72,8 +66,8 @@ export default class Camera {
 		sessionStorage.removeItem('cameraTarget')
 
 		this.controls.reset()
-		this.instance.position.set(this.options.position.x, this.options.position.y, this.options.position.z)
-		this.controls.target.set(this.options.target.x, this.options.target.y, this.options.target.z)
+		this.instance.position.copy(this.options.position)
+		this.controls.target.copy(this.options.target)
 	}
 
 	resize() {
