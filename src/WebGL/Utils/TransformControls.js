@@ -5,7 +5,7 @@ import EventEmitter from 'utils/EventEmitter.js'
 let instance = null
 
 export default class TransformControls extends EventEmitter {
-	constructor(_canvas) {
+	constructor() {
 		super()
 		// Singleton
 		if (instance) {
