@@ -51,7 +51,6 @@ export default class Experience {
 	}
 
 	update() {
-		this.camera.update()
 		this.activeScene.update()
 		this.renderer.update()
 		this.debug.update()
