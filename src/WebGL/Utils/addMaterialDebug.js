@@ -95,9 +95,9 @@ const materialParams = {
 
 /**
  * Adds debugging functionality to a given 3D material within a folder interface.
- * @param {FolderApi} folder
- * @param {Material} material
- * @param {{ title?: string, expanded?: boolean }} options
+ * @param {FolderApi} folder - Tweakpane folder
+ * @param {Material} material - 3D material
+ * @param {{ title?: string, expanded?: boolean }} [options] - Options
  */
 export default function addMaterialDebug(folder, material, options = {}) {
 	const materialKeys = Object.keys(materialParams)

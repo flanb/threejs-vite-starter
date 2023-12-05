@@ -1,6 +1,6 @@
 import Experience from '../Experience.js'
 import { CircleGeometry, Mesh, MeshStandardMaterial, RepeatWrapping, SRGBColorSpace } from 'three'
-import addMeshDebug from 'utils/addMeshDebug.js'
+import addObjectDebug from 'utils/addObjectDebug.js'
 
 export default class Floor {
 	constructor() {
@@ -52,6 +52,6 @@ export default class Floor {
 	}
 
 	setDebug() {
-		addMeshDebug(this.debug.ui, this.mesh)
+		addObjectDebug(this.debug.ui, this.mesh)
 	}
 }

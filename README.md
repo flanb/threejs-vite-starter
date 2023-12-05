@@ -23,4 +23,4 @@ npm run dev
 - `GltfClone`: Clone a gltf model with bones
 - `Sound management`: Minimal sound management 
 - `Input management`: Minimal input management
-- `addMeshDebug or addMaterialDebug`: Auto debug parameters of a mesh or a material
+- `addObjectDebug or addMaterialDebug`: Auto debug parameters of a mesh or a material

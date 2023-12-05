@@ -156,7 +156,7 @@ export default class Debug {
 		// debug message when something is added to the scene
 		this.experience.scene.add = (function (original) {
 			return function (object) {
-				if (object.name !== 'transformControls') {
+				if (!object.devObject) {
 					console.debug(`📦 ${object.name ? object.name : `unnamed ${object.type}`} added to the scene`, object)
 				}
 				return original.apply(this, arguments)

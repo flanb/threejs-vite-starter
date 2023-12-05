@@ -1,7 +1,7 @@
 import Experience from 'webgl/Experience.js'
 import { AnimationMixer, Mesh } from 'three'
 import InputManager from 'utils/InputManager.js'
-import addMeshDebug from 'utils/addMeshDebug.js'
+import addObjectDebug from 'utils/addObjectDebug.js'
 
 export default class Fox {
 	constructor() {
@@ -87,7 +87,7 @@ export default class Fox {
 	}
 
 	setDebug() {
-		const debugFolder = addMeshDebug(this.debug.ui, this.model)
+		const debugFolder = addObjectDebug(this.debug.ui, this.model)
 		const debugObject = {
 			playIdle: () => {
 				this.animation.play('idle')

@@ -1,6 +1,6 @@
 import Experience from '../Experience.js'
 import { DirectionalLight, Mesh, MeshStandardMaterial, SRGBColorSpace } from 'three'
-import addMeshDebug from 'utils/addMeshDebug.js'
+import addObjectDebug from 'utils/addObjectDebug.js'
 
 export default class Environment {
 	constructor() {
@@ -33,7 +33,7 @@ export default class Environment {
 
 		// Debug
 		if (this.debug.active) {
-			const debugFolder = addMeshDebug(this.environmentDebugFolder, this.sunLight)
+			const debugFolder = addObjectDebug(this.environmentDebugFolder, this.sunLight)
 
 			debugFolder.addBinding(this.sunLight, 'intensity', {
 				min: 0,

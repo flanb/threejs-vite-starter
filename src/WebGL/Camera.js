@@ -1,6 +1,7 @@
 import Experience from './Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { CameraHelper, PerspectiveCamera, Vector3 } from 'three'
+import useTransformControls from 'utils/useTransformControls.js'
 
 export default class Camera {
 	constructor() {
@@ -51,14 +52,18 @@ export default class Camera {
 
 		const controlsCameraPosition = JSON.parse(sessionStorage.getItem('controlsCameraPosition'))
 		const controlsCameraTarget = JSON.parse(sessionStorage.getItem('controlsCameraTarget'))
-		this.controlsCamera.position.copy(
-			new Vector3(controlsCameraPosition.x, controlsCameraPosition.y, controlsCameraPosition.z) ||
-				this.options.controlsCamera.position,
-		)
-		this.controlsCamera.lookAt(
-			new Vector3(controlsCameraTarget.x, controlsCameraTarget.y, controlsCameraTarget.z) ||
-				this.options.controlsCamera.target,
-		)
+		if (controlsCameraPosition) {
+			this.controlsCamera.position.copy(
+				new Vector3(controlsCameraPosition.x, controlsCameraPosition.y, controlsCameraPosition.z),
+			)
+		} else {
+			this.controlsCamera.position.copy(this.options.controlsCamera.position)
+		}
+		if (controlsCameraTarget) {
+			this.controlsCamera.lookAt(new Vector3(controlsCameraTarget.x, controlsCameraTarget.y, controlsCameraTarget.z))
+		} else {
+			this.controlsCamera.lookAt(this.options.controlsCamera.target)
+		}
 
 		//Helper
 		this.instance.cameraHelper = new CameraHelper(this.instance)
@@ -83,25 +88,25 @@ export default class Camera {
 	}
 
 	setDebug() {
-		this.debugFolder = this.debug.ui.addFolder({
+		const debugFolder = this.debug.ui.addFolder({
 			title: 'Camera',
 			expanded: false,
 		})
 
-		this.debugFolder.addBinding(this.options, 'fov', { min: 0, max: 180, step: 1 }).on('change', () => {
+		debugFolder.addBinding(this.options, 'fov', { min: 0, max: 180, step: 1 }).on('change', () => {
 			this.sceneCamera.fov = this.options.fov
 			this.sceneCamera.updateProjectionMatrix()
 			if (this.sceneCamera.cameraHelper) this.sceneCamera.cameraHelper.update()
 		})
 
-		this.debugFolder.addBinding(this.options, 'frustum', { min: 0.1, max: 100, step: 0.1 }).on('change', () => {
+		debugFolder.addBinding(this.options, 'frustum', { min: 0.1, max: 100, step: 0.1 }).on('change', () => {
 			this.sceneCamera.near = this.options.frustum.min
 			this.sceneCamera.far = this.options.frustum.max
 			this.sceneCamera.updateProjectionMatrix()
 			if (this.sceneCamera.cameraHelper) this.sceneCamera.cameraHelper.update()
 		})
 
-		this.debugFolder
+		debugFolder
 			.addBinding(this.options.controlsCamera, 'active', {
 				label: 'Controls camera',
 			})
@@ -119,7 +124,7 @@ export default class Camera {
 				}
 			})
 
-		this.debugFolder
+		debugFolder
 			.addButton({
 				title: 'Reset Controls',
 			})
