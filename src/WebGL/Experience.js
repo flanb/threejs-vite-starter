@@ -7,6 +7,7 @@ import Resources from 'utils/Resources.js'
 import SceneManager from 'utils/SceneManager.js'
 import sources from './sources.json'
 import { Mesh, Scene } from 'three'
+import AudioManager from 'utils/AudioManager.js'
 
 let instance = null
 
@@ -33,6 +34,7 @@ export default class Experience {
 		this.resources = new Resources(sources)
 		this.renderer = new Renderer()
 		this.activeScene = new SceneManager()
+		this.audioManager = new AudioManager()
 
 		// Resize event
 		this.sizes.on('resize', () => {

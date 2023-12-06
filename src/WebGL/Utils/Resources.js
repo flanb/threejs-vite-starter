@@ -1,5 +1,5 @@
 import EventEmitter from './EventEmitter.js'
-import { CubeTextureLoader, TextureLoader } from 'three'
+import { AudioLoader, CubeTextureLoader, TextureLoader } from 'three'
 import Experience from 'webgl/Experience.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
@@ -15,7 +15,7 @@ export default class Resources extends EventEmitter {
 		this.sources = sources
 
 		/**
-		 * @type {{[name: string]: Texture | CubeTexture | Object3D}}
+		 * @type {{[name: string]: Texture | CubeTexture | Object3D | AudioBuffer}}
 		 */
 		this.items = {}
 		this.toLoad = this.sources.length
@@ -66,6 +66,7 @@ export default class Resources extends EventEmitter {
 		this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
 		this.loaders.textureLoader = new TextureLoader()
 		this.loaders.cubeTextureLoader = new CubeTextureLoader()
+		this.loaders.audioLoader = new AudioLoader()
 	}
 
 	startLoading() {
@@ -90,6 +91,11 @@ export default class Resources extends EventEmitter {
 					break
 				case 'cubeTexture':
 					this.loaders.cubeTextureLoader.load(source.path, (file) => {
+						this.sourceLoaded(source, file)
+					})
+					break
+				case 'audio':
+					this.loaders.audioLoader.load(source.path, (file) => {
 						this.sourceLoaded(source, file)
 					})
 					break
