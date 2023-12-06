@@ -70,6 +70,7 @@ export default class Resources extends EventEmitter {
 
 	startLoading() {
 		if (this.debug.active && this.debug.debugParams.ResourceLog) {
+			console.group('🖼️ Resources')
 			console.debug('⏳ Loading resources...')
 			this.totalStartTime = performance.now()
 		}
@@ -117,6 +118,7 @@ export default class Resources extends EventEmitter {
 				const totalEndTime = performance.now()
 				const totalLoadTime = totalEndTime - this.totalStartTime
 				console.debug(`✅ Resources loaded in ${totalLoadTime}ms!`)
+				console.groupEnd()
 			}
 			if (this.loadingScreenElement) this.loadingScreenElement.remove()
 			this.trigger('ready')
