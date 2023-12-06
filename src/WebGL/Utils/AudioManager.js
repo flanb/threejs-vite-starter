@@ -65,7 +65,6 @@ export default class AudioManager {
 				audio.instance.setVolume(audio.volume || 1)
 				if (audio.autoplay) audio.instance.play()
 				audio.instance.name = key
-				this.scene.add(audio.instance)
 			}
 		})
 	}
