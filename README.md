@@ -21,6 +21,6 @@ npm run dev
 - `Scene management`: Add multiple scenes and switch between them by adding `?scene=scene-name` to the url
 - `Debug mode`: Enable debug mode by adding `#debug` to the url
 - `GltfClone`: Clone a gltf model with bones
-- `Sound management`: Minimal sound management 
+- `Audio management`: Add audios and positional audios with a complete debug panel
 - `Input management`: Minimal input management
 - `addObjectDebug or addMaterialDebug`: Auto debug parameters of a mesh or a material

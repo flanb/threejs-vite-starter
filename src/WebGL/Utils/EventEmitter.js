@@ -141,6 +141,12 @@ export default class EventEmitter {
 		return finalResult
 	}
 
+	triggerOnce(_name, _args) {
+		if (this.callbacks.base[_name] === undefined) return
+		this.trigger(_name, _args)
+		this.off(_name)
+	}
+
 	resolveNames(_names) {
 		let names = _names
 		names = names.replace(/[^a-zA-Z0-9 ,/.]/g, '')
