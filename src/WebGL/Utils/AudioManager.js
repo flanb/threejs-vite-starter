@@ -2,6 +2,7 @@ import Experience from 'webgl/Experience.js'
 import { AudioListener, Mesh, PositionalAudio, Vector3, Audio } from 'three'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { PositionalAudioHelper } from 'three/examples/jsm/helpers/PositionalAudioHelper.js'
+import InputManager from 'utils/InputManager.js'
 
 export default class AudioManager {
 	constructor() {
@@ -10,6 +11,8 @@ export default class AudioManager {
 		this.camera = this.experience.camera
 		this.scene = this.experience.scene
 		this.debug = this.experience.debug
+
+		this.audioContextReady = false
 
 		this.setCameraListener()
 		this.resources.on('ready', () => {
@@ -35,6 +38,15 @@ export default class AudioManager {
 			this.setAudios()
 			if (this.debug.active) this.setDebug()
 		})
+
+		InputManager.on('audioContextReady', () => {
+			this.audioContextReady = true
+
+			Object.keys(this.audios).forEach((key) => {
+				const audio = this.audios[key]
+				if (audio.autoplay) audio.instance.play()
+			})
+		})
 	}
 
 	setCameraListener() {
@@ -51,7 +63,6 @@ export default class AudioManager {
 				audio.instance.setRefDistance(audio.refDistance || 20)
 				audio.instance.setLoop(audio.loop || false)
 				audio.instance.setVolume(audio.volume || 1)
-				if (audio.autoplay) audio.instance.play()
 				audio.mesh = new Mesh()
 				audio.mesh.add(audio.instance)
 				audio.mesh.position.copy(audio.position)
@@ -63,7 +74,6 @@ export default class AudioManager {
 				audio.instance.setBuffer(audio.buffer)
 				audio.instance.setLoop(audio.loop || false)
 				audio.instance.setVolume(audio.volume || 1)
-				if (audio.autoplay) audio.instance.play()
 				audio.instance.name = key
 			}
 		})
