@@ -26,8 +26,7 @@
 	{
 		"name": "foxModel",
 		"type": "gltf",
-		"path": "models/Fox/glTF/Fox.gltf",
-		"colorSpace": "srgb"
+		"path": "models/Fox/glTF/Fox.gltf"
 	},
 	{
 		"name": "foxAudio",

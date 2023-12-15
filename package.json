@@ -19,7 +19,7 @@
 		"stats.js": "^0.17.0",
 		"tweakpane": "^4.0.1",
 		"tweakpane-plugin-media": "github:flanb/tweakpane-plugin-media",
-		"vite": "^5.0.4",
+		"vite": "^5.0.6",
 		"vite-plugin-glslify": "^2.0.2"
 	}
 }

@@ -88,27 +88,28 @@ export default class Debug {
 		titleElement.childNodes.forEach((child) => {
 			child.style.pointerEvents = 'none'
 		})
-		// console.log(this.ui.element.children[2]);
-
 		let move = () => {}
+		let hasMoved = true
 		const handleMouseDown = (event) => {
 			titleElement.style.cursor = 'grabbing'
 			const clickTargetX = event.layerX
 			const clickTargetWidth = event.target.clientWidth
 			const clickTargetY = event.layerY
 
-			move = (event) => {
-				const x = event.clientX
-				const y = event.clientY
+			move = ({ clientX, clientY }) => {
+				hasMoved = true
 
-				container.style.right = `${innerWidth - x - (clickTargetWidth - clickTargetX)}px`
-				container.style.top = `${y - clickTargetY}px`
+				container.style.right = `${this.experience.sizes.width - clientX - (clickTargetWidth - clickTargetX)}px`
+				container.style.top = `${clientY - clickTargetY}px`
 			}
 
 			document.addEventListener('mousemove', move)
 		}
 		const handleMouseUp = () => {
 			titleElement.style.cursor = null
+
+			if (hasMoved) this.ui.controller.foldable.set('expanded', !this.ui.controller.foldable.get('expanded'))
+			hasMoved = false
 
 			document.removeEventListener('mousemove', move)
 		}
