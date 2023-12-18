@@ -20,6 +20,7 @@ export default class Debug {
 			this.setPlugins()
 			this.setImportExportButtons()
 			this.setMoveEvent()
+			this.setResizeEvent()
 
 			this.setDebugManager()
 
@@ -116,6 +117,39 @@ export default class Debug {
 
 		titleElement.addEventListener('mousedown', handleMouseDown)
 		titleElement.addEventListener('mouseup', handleMouseUp)
+	}
+
+	setResizeEvent() {
+		const containerElement = this.ui.containerElem_
+		containerElement.style.minWidth = '250px'
+
+		const horizontalResizeElement = document.createElement('div')
+		horizontalResizeElement.style.position = 'absolute'
+		horizontalResizeElement.style.left = '-3px'
+		horizontalResizeElement.style.top = '0'
+		horizontalResizeElement.style.bottom = '0'
+		horizontalResizeElement.style.width = '5px'
+		horizontalResizeElement.style.cursor = 'ew-resize'
+		containerElement.appendChild(horizontalResizeElement)
+
+		horizontalResizeElement.addEventListener('mousedown', (event) => {
+			containerElement.style.pointerEvents = 'none'
+			const clickTargetX = event.clientX
+			const clickTargetWidth = containerElement.clientWidth
+
+			const handleMouseMove = ({ clientX }) => {
+				containerElement.style.width = `${clickTargetWidth - (clientX - clickTargetX)}px`
+			}
+
+			const handleMouseUp = () => {
+				document.removeEventListener('mousemove', handleMouseMove)
+				document.removeEventListener('mouseup', handleMouseUp)
+				containerElement.style.pointerEvents = null
+			}
+
+			document.addEventListener('mousemove', handleMouseMove)
+			document.addEventListener('mouseup', handleMouseUp)
+		})
 	}
 
 	setDebugManager() {

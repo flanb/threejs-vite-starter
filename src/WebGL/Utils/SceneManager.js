@@ -28,11 +28,7 @@ export default class SceneManager {
 	}
 
 	setDebug() {
-		this.debugFolder = this.debug.ui.addFolder({
-			title: 'Scene Manager',
-			expanded: false,
-		})
-		this.debugFolder
+		this.debug.ui
 			.addBlade({
 				view: 'list',
 				label: 'scene',
