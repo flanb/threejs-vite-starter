@@ -124,16 +124,16 @@ export default class Debug {
 		containerElement.style.minWidth = '260px'
 
 		const styleElement = document.createElement('style')
-		styleElement.innerHTML = '.tp-lblv_v { flex-grow: 1 } .tp-lblv_l { min-width: 64px; max-width: 100px;}'
+		styleElement.innerHTML = `
+		.tp-lblv_v { flex-grow: 1 }
+		.tp-lblv_l { min-width: 64px; max-width: 100px;}
+		.horizontal-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 5px; cursor: ew-resize; }
+		.horizontal-resize:hover { background-color: #ffffff10; }
+		`
 		document.head.appendChild(styleElement)
 
 		const horizontalResizeElement = document.createElement('div')
-		horizontalResizeElement.style.position = 'absolute'
-		horizontalResizeElement.style.left = '-3px'
-		horizontalResizeElement.style.top = '0'
-		horizontalResizeElement.style.bottom = '0'
-		horizontalResizeElement.style.width = '5px'
-		horizontalResizeElement.style.cursor = 'ew-resize'
+		horizontalResizeElement.classList.add('horizontal-resize')
 		containerElement.appendChild(horizontalResizeElement)
 
 		horizontalResizeElement.addEventListener('mousedown', (event) => {
@@ -148,7 +148,7 @@ export default class Debug {
 			const handleMouseUp = () => {
 				document.removeEventListener('mousemove', handleMouseMove)
 				document.removeEventListener('mouseup', handleMouseUp)
-				containerElement.style.pointerEvents = null
+				containerElement.style.pointerEvents = ''
 			}
 
 			document.addEventListener('mousemove', handleMouseMove)
