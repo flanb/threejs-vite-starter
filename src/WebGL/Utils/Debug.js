@@ -121,7 +121,11 @@ export default class Debug {
 
 	setResizeEvent() {
 		const containerElement = this.ui.containerElem_
-		containerElement.style.minWidth = '250px'
+		containerElement.style.minWidth = '260px'
+
+		const styleElement = document.createElement('style')
+		styleElement.innerHTML = '.tp-lblv_v { flex-grow: 1 } .tp-lblv_l { min-width: 64px; max-width: 100px;}'
+		document.head.appendChild(styleElement)
 
 		const horizontalResizeElement = document.createElement('div')
 		horizontalResizeElement.style.position = 'absolute'
