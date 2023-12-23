@@ -1,23 +1,9 @@
 import Experience from './Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { CameraHelper, PerspectiveCamera, Vector3 } from 'three'
+import InputManager from 'utils/InputManager.js'
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
 
-function setCameraDebugPositionAndTarget(camera) {
-	const debugCameraPosition = JSON.parse(sessionStorage.getItem('debugCameraPosition'))
-	const debugCameraTarget = JSON.parse(sessionStorage.getItem('debugCameraTarget'))
-
-	if (debugCameraPosition) {
-		camera.position.copy(new Vector3(debugCameraPosition.x, debugCameraPosition.y, debugCameraPosition.z))
-	} else {
-		camera.position.copy(this.options.position)
-	}
-
-	if (debugCameraTarget) {
-		camera.lookAt(new Vector3(debugCameraTarget.x, debugCameraTarget.y, debugCameraTarget.z))
-	} else {
-		camera.lookAt(this.options.target)
-	}
-}
 export default class Camera {
 	constructor() {
 		this.experience = new Experience()
@@ -25,6 +11,7 @@ export default class Camera {
 		this.scene = this.experience.scene
 		this.canvas = this.experience.canvas
 		this.debug = this.experience.debug
+		this.time = this.experience.time
 
 		this.options = {
 			fov: 35,
@@ -39,6 +26,25 @@ export default class Camera {
 		if (this.options.currentCamera === 'fpsCamera') this.setFpsCamera()
 
 		if (this.debug.active) this.setDebug()
+	}
+
+	#setCameraDebugPositionAndTarget(camera) {
+		const debugCameraPosition = JSON.parse(sessionStorage.getItem('debugCameraPosition'))
+		const debugCameraTarget = JSON.parse(sessionStorage.getItem('debugCameraTarget'))
+
+		if (debugCameraPosition) {
+			camera.position.copy(new Vector3(debugCameraPosition.x, debugCameraPosition.y, debugCameraPosition.z))
+		} else {
+			camera.position.copy(this.options.position)
+		}
+
+		if (debugCameraTarget) {
+			camera.lookAt(new Vector3(debugCameraTarget.x, debugCameraTarget.y, debugCameraTarget.z))
+			if (camera.controls?.target)
+				camera.controls.target.copy(new Vector3(debugCameraTarget.x, debugCameraTarget.y, debugCameraTarget.z))
+		} else {
+			camera.lookAt(this.options.target)
+		}
 	}
 
 	setInstance() {
@@ -67,7 +73,7 @@ export default class Camera {
 			sessionStorage.setItem('debugCameraTarget', JSON.stringify(this.controlsCamera.controls.target))
 		})
 
-		setCameraDebugPositionAndTarget.bind(this)(this.controlsCamera)
+		this.#setCameraDebugPositionAndTarget(this.controlsCamera)
 
 		//Helper
 		if (!this.sceneCamera.cameraHelper) {
@@ -83,7 +89,57 @@ export default class Camera {
 		this.fpsCamera = new PerspectiveCamera(50, this.sizes.width / this.sizes.height)
 		this.fpsCamera.name = 'fpsCamera'
 
-		setCameraDebugPositionAndTarget.bind(this)(this.fpsCamera)
+		this.#setCameraDebugPositionAndTarget(this.fpsCamera)
+
+		this.fpsCamera.controls = new PointerLockControls(this.fpsCamera, this.canvas)
+		this.fpsCamera.controls.lockControls = () => {
+			if (this.instance.name !== 'fpsCamera') return
+			this.fpsCamera.controls.lock()
+		}
+		this.canvas.addEventListener('click', this.fpsCamera.controls.lockControls)
+
+		const movement = {
+			moveForward: false,
+			moveBackward: false,
+			moveLeft: false,
+			moveRight: false,
+			moveFaster: false,
+		}
+
+		const actions = {
+			up: 'moveForward',
+			down: 'moveBackward',
+			left: 'moveLeft',
+			right: 'moveRight',
+			shift: 'moveFaster',
+		}
+
+		Object.keys(actions).forEach((action) => {
+			InputManager.on(action, (value) => (movement[actions[action]] = value))
+		})
+
+		const direction = new Vector3()
+
+		this.time.on('tick', () => {
+			if (!this.fpsCamera.controls.isLocked) return
+			this.fpsCamera.getWorldDirection(direction)
+			const speed = movement.moveFaster ? 0.05 : 0.01
+			const directionSpeed = direction.multiplyScalar(speed * this.time.delta)
+			if (movement.moveForward) this.fpsCamera.position.add(directionSpeed)
+			if (movement.moveBackward) this.fpsCamera.position.sub(directionSpeed)
+			if (movement.moveRight) this.fpsCamera.position.add(directionSpeed.cross(this.fpsCamera.up))
+			if (movement.moveLeft) this.fpsCamera.position.sub(directionSpeed.cross(this.fpsCamera.up))
+		})
+
+		this.fpsCamera.controls.addEventListener('change', () => {
+			sessionStorage.setItem('debugCameraPosition', JSON.stringify(this.fpsCamera.position))
+
+			const target = new Vector3()
+			this.fpsCamera.getWorldDirection(target).multiplyScalar(20)
+			target.add(this.fpsCamera.position)
+
+			sessionStorage.setItem('debugCameraTarget', JSON.stringify(target))
+		})
 
 		//Helper
 		if (!this.sceneCamera.cameraHelper) {
@@ -144,7 +200,7 @@ export default class Camera {
 
 				if (!isSceneCamera) {
 					this[`set${value.charAt(0).toUpperCase() + value.slice(1)}`]()
-					setCameraDebugPositionAndTarget.bind(this)(this[value])
+					this.#setCameraDebugPositionAndTarget(this[value])
 				}
 
 				this.sceneCamera.cameraHelper.visible = !isSceneCamera
@@ -157,5 +213,24 @@ export default class Camera {
 				title: 'Reset debug position',
 			})
 			.on('click', this.resetDebugPosition.bind(this))
+	}
+
+	//TODO: create dispose method
+	dispose() {
+		this.scene.remove(this.sceneCamera)
+		if (this.sceneCamera.cameraHelper) {
+			this.sceneCamera.cameraHelper.dispose()
+			this.scene.remove(this.sceneCamera.cameraHelper)
+		}
+		if (this.controlsCamera) {
+			this.controlsCamera.controls.dispose()
+			this.scene.remove(this.controlsCamera)
+		}
+		if (this.fpsCamera) {
+			this.fpsCamera.controls.removeEventListener('change', this.fpsCamera.controls._listeners.change[0])
+			this.fpsCamera.controls.dispose()
+			this.canvas.removeEventListener('click', this.fpsCamera.controls.lockControls)
+			this.scene.remove(this.fpsCamera)
+		}
 	}
 }

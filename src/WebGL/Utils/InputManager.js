@@ -20,29 +20,29 @@ class InputManager extends EventEmitter {
 	}
 
 	setKeyHandler(key, value) {
-		switch (key) {
-			case 'ArrowUp':
+		switch (key.toLowerCase()) {
+			case 'arrowup':
 			case 'w':
 			case 'z':
 				this.trigger('up', [value])
 				break
-			case 'ArrowDown':
+			case 'arrowdown':
 			case 's':
 				this.trigger('down', [value])
 				break
-			case 'ArrowLeft':
+			case 'arrowleft':
 			case 'q':
 			case 'a':
 				this.trigger('left', [value])
 				break
-			case 'ArrowRight':
+			case 'arrowright':
 			case 'd':
 				this.trigger('right', [value])
 				break
 			case ' ':
 				this.trigger('space', [value])
 				break
-			case 'Shift':
+			case 'shift':
 				this.trigger('shift', [value])
 				break
 			default:
