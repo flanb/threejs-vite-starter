@@ -215,7 +215,6 @@ export default class Camera {
 			.on('click', this.resetDebugPosition.bind(this))
 	}
 
-	//TODO: create dispose method
 	dispose() {
 		this.scene.remove(this.sceneCamera)
 		if (this.sceneCamera.cameraHelper) {
