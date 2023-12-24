@@ -142,7 +142,7 @@ export default class EventEmitter {
 	}
 
 	triggerOnce(_name, _args) {
-		if (this.callbacks.base[_name] === undefined) return
+		if (this.callbacks.base && this.callbacks.base[name] !== undefined) return
 		this.trigger(_name, _args)
 		this.off(_name)
 	}

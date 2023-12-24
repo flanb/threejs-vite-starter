@@ -10,16 +10,16 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"three": "^0.159.0"
+		"three": "^0.160.0"
 	},
 	"devDependencies": {
-		"@tweakpane/core": "^2.0.1",
-		"@tweakpane/plugin-essentials": "0.2.0",
-		"@types/three": "^0.159.0",
+		"@tweakpane/core": "^2.0.3",
+		"@tweakpane/plugin-essentials": "0.2.1",
+		"@types/three": "^0.160.0",
 		"stats.js": "^0.17.0",
-		"tweakpane": "^4.0.1",
+		"tweakpane": "^4.0.3",
 		"tweakpane-plugin-media": "github:flanb/tweakpane-plugin-media",
-		"vite": "^5.0.6",
+		"vite": "^5.0.10",
 		"vite-plugin-glslify": "^2.0.2"
 	}
 }
