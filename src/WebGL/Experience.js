@@ -30,10 +30,10 @@ export default class Experience {
 		this.time = new Time()
 		this.scene = new Scene()
 		this.debug = new Debug()
-		this.camera = new Camera()
 		this.resources = new Resources(sources)
-		this.renderer = new Renderer()
 		this.activeScene = new SceneManager()
+		this.camera = new Camera()
+		this.renderer = new Renderer()
 		this.audioManager = new AudioManager()
 
 		// Resize event
