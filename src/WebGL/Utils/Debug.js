@@ -21,6 +21,7 @@ export default class Debug {
 			this.setImportExportButtons()
 			this.setMoveEvent()
 			this.setResizeEvent()
+			this.setResetButton()
 
 			this.setDebugManager()
 
@@ -109,8 +110,10 @@ export default class Debug {
 		const handleMouseUp = () => {
 			titleElement.style.cursor = null
 
-			if (hasMoved) this.ui.controller.foldable.set('expanded', !this.ui.controller.foldable.get('expanded'))
-			hasMoved = false
+			if (hasMoved) {
+				this.ui.controller.foldable.set('expanded', !this.ui.controller.foldable.get('expanded'))
+				hasMoved = false
+			}
 
 			document.removeEventListener('mousemove', move)
 		}
@@ -121,7 +124,7 @@ export default class Debug {
 
 	setResizeEvent() {
 		const containerElement = this.ui.containerElem_
-		containerElement.style.minWidth = '260px'
+		containerElement.style.minWidth = '280px'
 
 		const styleElement = document.createElement('style')
 		styleElement.innerHTML = `
@@ -154,6 +157,54 @@ export default class Debug {
 			document.addEventListener('mousemove', handleMouseMove)
 			document.addEventListener('mouseup', handleMouseUp)
 		})
+	}
+
+	setResetButton() {
+		const resetButton = document.createElement('button')
+		resetButton.classList.add('tp-reset-button')
+		const styleElement = document.createElement('style')
+		styleElement.innerHTML = `
+			.tp-reset-button {
+				position: absolute;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				width: 16px;
+				height: 16px;
+				margin: auto;
+				stroke: var(--btn-bg);
+				stroke-linecap: round;
+				stroke-linejoin: round;
+				stroke-width: 2;
+				fill: none;
+				background: none;
+				border: none;
+				cursor: pointer;
+			}
+			.tp-reset-button:hover {
+				stroke: var(--btn-bg-a);
+			}
+		`
+		document.head.appendChild(styleElement)
+
+		resetButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox='0 0 24 24'><path d="M21 12a9 9 0 0 0-9-9 10 10 0 0 0-7 3L3 8"/><path d="M3 3v5h5M3 12a9 9 0 0 0 9 9 10 10 0 0 0 7-3l2-2"/><path d="M16 16h5v5"/></svg>`
+
+		this.ui.pool_.createBindingApi = (function (original) {
+			return function (bindingController) {
+				const valueElement = bindingController.view.valueElement
+				valueElement.style.position = 'relative'
+				valueElement.style.paddingRight = '20px'
+				const clonedResetButton = resetButton.cloneNode(true)
+				valueElement.appendChild(clonedResetButton)
+
+				const initialValue = bindingController.valueController.value.rawValue
+				clonedResetButton.addEventListener('click', () => {
+					bindingController.valueController.value.setRawValue(initialValue)
+				})
+
+				return original.apply(this, arguments)
+			}
+		})(this.ui.pool_.createBindingApi)
 	}
 
 	setDebugManager() {

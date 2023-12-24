@@ -122,7 +122,11 @@ export default function addMaterialDebug(folder, material, options = {}) {
 								label: key,
 							})
 							.on('change', ({ value }) => {
-								material[key] = new Texture(value)
+								const previousValue = material[key]
+								const texture = new Texture(value)
+								texture.colorSpace = previousValue.colorSpace
+								texture.flipY = previousValue.flipY
+								material[key] = texture
 								material[key].needsUpdate = true
 							})
 					}
