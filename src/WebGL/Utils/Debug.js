@@ -172,7 +172,7 @@ export default class Debug {
 				width: 16px;
 				height: 16px;
 				margin: auto;
-				stroke: var(--btn-bg);
+				stroke: #65656e;
 				stroke-linecap: round;
 				stroke-linejoin: round;
 				stroke-width: 2;
@@ -182,12 +182,12 @@ export default class Debug {
 				cursor: pointer;
 			}
 			.tp-reset-button:hover {
-				stroke: var(--btn-bg-a);
+				stroke: var(--btn-bg-h);
 			}
 		`
 		document.head.appendChild(styleElement)
 
-		resetButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox='0 0 24 24'><path d="M21 12a9 9 0 0 0-9-9 10 10 0 0 0-7 3L3 8"/><path d="M3 3v5h5M3 12a9 9 0 0 0 9 9 10 10 0 0 0 7-3l2-2"/><path d="M16 16h5v5"/></svg>`
+		resetButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9C9 3 7 4 5 6L3 8m0 0V3m0 5h5m-5 4a9 9 0 0 0 9 9c3 0 5-1 7-3l2-2m0 0h-5m5 0v5"/></svg>`
 
 		this.ui.pool_.createBindingApi = (function (original) {
 			return function (bindingController) {
@@ -198,6 +198,14 @@ export default class Debug {
 				valueElement.appendChild(clonedResetButton)
 
 				const initialValue = bindingController.valueController.value.rawValue
+				bindingController.value.emitter.on('change', ({ rawValue }) => {
+					if (JSON.stringify(rawValue) === JSON.stringify(initialValue)) {
+						clonedResetButton.style.stroke = ''
+						return
+					}
+					clonedResetButton.style.stroke = 'var(--btn-bg-a)'
+				})
+
 				clonedResetButton.addEventListener('click', () => {
 					bindingController.valueController.value.setRawValue(initialValue)
 				})
