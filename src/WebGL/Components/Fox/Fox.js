@@ -2,6 +2,7 @@ import Experience from 'webgl/Experience.js'
 import { AnimationMixer, Mesh } from 'three'
 import InputManager from 'utils/InputManager.js'
 import addObjectDebug from 'utils/addObjectDebug.js'
+import AnimationController from 'utils/AnimationController.js'
 
 export default class Fox {
 	constructor() {
@@ -15,8 +16,10 @@ export default class Fox {
 		this.resource = this.resources.items.foxModel
 
 		this.setModel()
-		this.setAnimation()
-		this.setInputs()
+
+		this.animation = new AnimationController({ animations: this.resource.animations, model: this.resource.scene })
+		this.animation.fadeAnimation('Survey', { loop: true })
+
 		if (this.debug.active) this.setDebug()
 	}
 
@@ -62,45 +65,12 @@ export default class Fox {
 		}
 	}
 
-	setInputs() {
-		let isMoving = false
-		InputManager.on('up', (value) => {
-			if (value && !isMoving) {
-				this.animation.play('walking')
-				isMoving = true
-			} else if (!value && isMoving) {
-				this.animation.play('idle')
-				isMoving = false
-			}
-		})
-		InputManager.on('shift', (value) => {
-			if (value && isMoving) {
-				this.animation.play('running')
-			} else if (!value && isMoving) {
-				this.animation.play('walking')
-			}
-		})
-	}
-
 	update() {
-		if (this.animation) this.animation.mixer.update(this.time.delta * 0.001)
+		this.animation.update(this.time.delta * 0.001)
 	}
 
 	setDebug() {
 		const debugFolder = addObjectDebug(this.debug.ui, this.model)
-		const debugObject = {
-			playIdle: () => {
-				this.animation.play('idle')
-			},
-			playWalking: () => {
-				this.animation.play('walking')
-			},
-			playRunning: () => {
-				this.animation.play('running')
-			},
-		}
-		debugFolder.addButton({ title: 'playIdle', label: 'playIdle' }).on('click', debugObject.playIdle)
-		debugFolder.addButton({ title: 'playWalking', label: 'playWalking' }).on('click', debugObject.playWalking)
-		debugFolder.addButton({ title: 'playRunning', label: 'playRunning' }).on('click', debugObject.playRunning)
+		this.animation.setDebug(debugFolder)
 	}
 }
