@@ -115,8 +115,11 @@ export default class Resources extends EventEmitter {
 		source.loadTime = source.endTime - source.startTime
 
 		if (this.debug.active && this.debug.debugParams.ResourceLog)
-			console.debug(`🖼️ ${source.name} loaded in ${source.loadTime}ms. (${this.loaded}/${this.toLoad})`)
-
+			console.debug(
+				`%c🖼️ ${source.name}%c loaded in ${source.loadTime}ms. (${this.loaded}/${this.toLoad})`,
+				'font-weight: bold',
+				'font-weight: normal',
+			)
 		if (this.loadingScreenElement) {
 			this.loadingBarElement.style.transform = `scaleX(${this.loaded / this.toLoad})`
 		}

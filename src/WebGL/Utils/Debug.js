@@ -255,7 +255,12 @@ export default class Debug {
 		this.experience.scene.add = (function (original) {
 			return function (object) {
 				if (!object.devObject) {
-					console.debug(`📦 ${object.name ? object.name : `unnamed ${object.type}`} added to the scene`, object)
+					console.debug(
+						`📦 %c${object.name ? object.name : `unnamed ${object.type}`}%c added to the scene`,
+						'font-weight: bold; background-color: #ffffff20; padding: 0.1rem 0.3rem; border-radius: 0.3rem',
+						'font-weight: normal',
+						object,
+					)
 				}
 				return original.apply(this, arguments)
 			}
