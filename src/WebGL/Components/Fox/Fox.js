@@ -36,35 +36,6 @@ export default class Fox {
 		})
 	}
 
-	setAnimation() {
-		this.animation = {}
-
-		// Mixer
-		this.animation.mixer = new AnimationMixer(this.model)
-
-		// Actions
-		this.animation.actions = {}
-
-		this.animation.actions.idle = this.animation.mixer.clipAction(this.resource.animations[0])
-		this.animation.actions.walking = this.animation.mixer.clipAction(this.resource.animations[1])
-		this.animation.actions.running = this.animation.mixer.clipAction(this.resource.animations[2])
-
-		this.animation.actions.current = this.animation.actions.idle
-		this.animation.actions.current.play()
-
-		// Play the action
-		this.animation.play = (name) => {
-			const newAction = this.animation.actions[name]
-			const oldAction = this.animation.actions.current
-
-			newAction.reset()
-			newAction.play()
-			newAction.crossFadeFrom(oldAction, 1)
-
-			this.animation.actions.current = newAction
-		}
-	}
-
 	update() {
 		this.animation.update(this.time.delta * 0.001)
 	}
