@@ -161,7 +161,7 @@ export default class AnimationController {
 					}),
 			}
 		}
-		animationControls = generateAnimationControls()
+		if (this.current) animationControls = generateAnimationControls()
 
 		const removeAnimationControls = () => {
 			Object.keys(animationControls).forEach((control) => {
