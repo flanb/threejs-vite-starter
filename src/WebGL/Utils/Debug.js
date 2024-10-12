@@ -14,6 +14,7 @@ export default class Debug {
 			const uiContainer = this.ui.containerElem_
 			const uiBindContainer = uiContainer.querySelector("[style='height: auto;']")
 			uiContainer.style.position = 'fixed'
+			uiContainer.style.userSelect = 'none'
 			uiBindContainer.style.maxHeight = '80vh'
 			uiBindContainer.style.overflowY = 'auto'
 
@@ -307,11 +308,12 @@ export default class Debug {
 			bottom: '1rem',
 			left: '1rem',
 			pointerEvents: 'none',
+			userSelect: 'none',
 			zIndex: '1000',
 			display: 'flex',
 			gap: '1rem',
 			fontSize: '12px',
-			'mix-blend-mode': 'difference',
+			mixBlendMode: 'difference',
 		})
 
 		monitoringValues.forEach((monitoringValue) => {
