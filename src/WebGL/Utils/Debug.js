@@ -311,6 +311,7 @@ export default class Debug {
 			display: 'flex',
 			gap: '1rem',
 			fontSize: '12px',
+			'mix-blend-mode': 'difference',
 		})
 
 		monitoringValues.forEach((monitoringValue) => {
