@@ -13,6 +13,9 @@ export default class Camera {
 		this.debug = this.experience.debug
 		this.time = this.experience.time
 
+		/**
+		 * @type {{ fov: number, frustum: { min: number, max: number }, position: Vector3, target: Vector3, currentCamera: 'sceneCamera' | 'controlsCamera' | 'fpsCamera' }}
+		 */
 		this.options = {
 			fov: 35,
 			frustum: { min: 1, max: 100 },
