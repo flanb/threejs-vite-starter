@@ -3,8 +3,6 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js'
 import { FolderApi } from '@tweakpane/core'
 import { Object3D } from 'three'
 
-let instance = null
-
 /**
  * @param {Object3D} object - Object to attach transform controls to
  * @param {FolderApi} [debugFolder] - Tweakpane folder
@@ -48,10 +46,10 @@ export default class useTransformControls {
 
 		this.instance.name = 'transformControl'
 		this.instance.devObject = true
-		this.scene.add(this.instance)
+		this.scene.add(this.instance.getHelper())
 
 		this.instance.attach(this.options.object)
-		if (this.options.debugFolder) this.instance.enabled = this.instance.visible = false
+		if (this.options.debugFolder) this.instance.enabled = this.instance.getHelper().visible = false
 	}
 
 	setDebugFeature() {
@@ -61,7 +59,7 @@ export default class useTransformControls {
 			})
 			.on('change', ({ value }) => {
 				this.instance.camera = this.camera.instance
-				this.instance.enabled = this.instance.visible = value
+				this.instance.enabled = this.instance.getHelper().visible = value
 				transformModeBlade.hidden = !value
 			})
 
