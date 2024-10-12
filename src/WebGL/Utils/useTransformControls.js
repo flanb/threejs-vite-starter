@@ -45,7 +45,7 @@ export default class useTransformControls {
 		})
 
 		this.instance.name = 'transformControl'
-		this.instance.devObject = true
+		this.instance.getHelper().devObject = true
 		this.scene.add(this.instance.getHelper())
 
 		this.instance.attach(this.options.object)
