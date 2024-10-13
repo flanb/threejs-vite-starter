@@ -9,7 +9,7 @@ import { Object3D } from 'three'
  * @returns {TransformControls} - Transform controls instance
  */
 export default class useTransformControls {
-	constructor(object, debugFolder) {
+	constructor(object, debugFolder, name) {
 		if (!object) throw new Error('useTransformControls: object is undefined')
 
 		this.experience = new Experience()
@@ -21,6 +21,7 @@ export default class useTransformControls {
 		this.options = {
 			object,
 			debugFolder,
+			name,
 		}
 
 		this.setInstance()
@@ -48,6 +49,10 @@ export default class useTransformControls {
 		this.instance.getHelper().devObject = true
 		this.scene.add(this.instance.getHelper())
 
+		if (this.options.object.parent === null) {
+			this.options.object.devObject = true
+			this.scene.add(this.options.object)
+		}
 		this.instance.attach(this.options.object)
 		if (this.options.debugFolder) this.instance.enabled = this.instance.getHelper().visible = false
 	}
@@ -55,7 +60,7 @@ export default class useTransformControls {
 	setDebugFeature() {
 		this.options.debugFolder
 			.addBinding({ control: false }, 'control', {
-				label: 'transform control',
+				label: this.options.name || 'transform control',
 			})
 			.on('change', ({ value }) => {
 				this.instance.camera = this.camera.instance
@@ -99,6 +104,7 @@ export default class useTransformControls {
 			positionBinding.refresh()
 			rotationBinding.refresh()
 			scaleBinding.refresh()
+			this.options.object.helper?.update()
 		})
 	}
 }

@@ -2,11 +2,20 @@ import addMaterialDebug from 'utils/addMaterialDebug.js'
 import useTransformControls from 'utils/useTransformControls.js'
 import { FolderApi } from '@tweakpane/core'
 import { Object3D } from 'three'
+import * as THREE from 'three'
+import Experience from 'webgl/Experience.js'
 
 const objectParams = {
 	visible: { type: 'boolean' },
 	castShadow: { type: 'boolean' },
 	receiveShadow: { type: 'boolean' },
+	intensity: { type: 'number', min: 0, max: 10, step: 0.01 },
+	color: { type: 'color', color: { type: 'float' } },
+	groundColor: { type: 'color', color: { type: 'float' } },
+	distance: { type: 'number', min: 0, max: 100, step: 0.01 },
+	decay: { type: 'number', min: 0, max: 10, step: 0.01 },
+	angle: { type: 'number', min: 0, max: Math.PI / 2, step: 0.01 },
+	penumbra: { type: 'number', min: 0, max: 1, step: 0.01 },
 }
 
 /**
@@ -30,14 +39,41 @@ export default function addObjectDebug(folder, object, options = {}) {
 		const keyValue = object[key]
 		const meshOption = objectParams[key]
 		if (keyValue !== undefined) {
-			debugFolder.addBinding(object, key, {
-				...meshOption,
-				label: key,
-			})
+			debugFolder
+				.addBinding(object, key, {
+					...meshOption,
+					label: key,
+				})
+				.on('change', () => {
+					object.helper?.update()
+				})
 		}
 	})
 
+	// display helper
+	const helperName = object.constructor.name + 'Helper'
+	if (helperName in THREE) {
+		const helperObject = new THREE[helperName](object)
+		helperObject.devObject = true
+		debugFolder
+			.addBinding({ helperVisible: false }, 'helperVisible', {
+				label: 'helper',
+			})
+			.on('change', ({ value }) => {
+				if (object.helper) {
+					object.helper.visible = value
+				} else {
+					object.helper = helperObject
+					object.helper.visible = value
+					object.parent.add(object.helper)
+				}
+			})
+	}
+
 	const controls = new useTransformControls(object, debugFolder)
+	if (object.target) {
+		const targetControls = new useTransformControls(object.target, debugFolder, 'transform control target')
+	}
 
 	object.traverse((child) => {
 		if (child.material) {
@@ -46,8 +82,6 @@ export default function addObjectDebug(folder, object, options = {}) {
 			})
 		}
 	})
-
-	//TODO: if there is animations, add animation debug
 
 	return debugFolder
 }
