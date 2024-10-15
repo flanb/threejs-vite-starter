@@ -21,6 +21,12 @@ export default class Resources extends EventEmitter {
 		this.toLoad = this.sources.length
 		this.loaded = 0
 
+		if (this.toLoad === 0) {
+			console.warn('No resources to load.')
+			this.trigger('ready')
+			return
+		}
+
 		if (!this.debug.active || this.debug.debugParams.LoadingScreen) {
 			this.setLoadingScreen()
 		}
