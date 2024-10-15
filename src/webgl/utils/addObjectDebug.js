@@ -3,7 +3,6 @@ import useTransformControls from 'utils/useTransformControls.js'
 import { FolderApi } from '@tweakpane/core'
 import { Object3D } from 'three'
 import * as THREE from 'three'
-import Experience from 'webgl/Experience.js'
 
 const objectParams = {
 	visible: { type: 'boolean' },

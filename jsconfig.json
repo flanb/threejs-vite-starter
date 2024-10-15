@@ -3,10 +3,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"webgl/*": ["./src/WebGL/*"],
-			"components/*": ["./src/WebGL/Components/*"],
-			"utils/*": ["./src/WebGL/Utils/*"],
-			"scenes/*": ["./src/WebGL/Scenes/*"]
+			"webgl/*": ["./src/webgl/*"],
+			"components/*": ["./src/webgl/components/*"],
+			"utils/*": ["./src/webgl/utils/*"],
+			"scenes/*": ["./src/webgl/scenes/*"]
 		}
 	},
 	"exclude": ["node_modules", "public", "dist"]
