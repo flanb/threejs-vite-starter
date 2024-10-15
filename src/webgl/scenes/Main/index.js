@@ -5,6 +5,7 @@ import Fox from 'components/Fox/Fox.js'
 import Cube from 'components/Cube/Cube.js'
 import Resources from 'core/Resources.js'
 import sources from './sources.json'
+import AudioManager from 'utils/AudioManager.js'
 
 export default class Main {
 	constructor() {
@@ -20,6 +21,8 @@ export default class Main {
 			this.cube = new Cube()
 			this.environment = new Environment()
 		})
+
+		const audioManager = new AudioManager()
 	}
 
 	update() {
