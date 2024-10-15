@@ -118,7 +118,7 @@ export default class Resources extends EventEmitter {
 		this.items[source.name] = file
 		this.loaded++
 		source.endTime = performance.now()
-		source.loadTime = source.endTime - source.startTime
+		source.loadTime = Math.floor(source.endTime - source.startTime)
 
 		if (this.debug.active && this.debug.debugParams.ResourceLog)
 			console.debug(
