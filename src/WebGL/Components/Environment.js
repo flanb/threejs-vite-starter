@@ -34,13 +34,6 @@ export default class Environment {
 		// Debug
 		if (this.debug.active) {
 			const debugFolder = addObjectDebug(this.environmentDebugFolder, this.sunLight)
-
-			debugFolder.addBinding(this.sunLight, 'intensity', {
-				min: 0,
-				max: 10,
-				step: 0.001,
-				label: 'intensity',
-			})
 		}
 	}
 
