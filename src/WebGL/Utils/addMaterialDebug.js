@@ -91,6 +91,7 @@ const materialParams = {
 		min: 0,
 		max: 2,
 	},
+	uniforms: { type: 'object' },
 }
 
 /**
@@ -160,7 +161,7 @@ export default function addMaterialDebug(folder, material, options = {}) {
 							: materialOption.options.map((v) => ({
 									value: v.toString(),
 									text: v.toString(),
-							  }))
+								}))
 
 					gui
 						.addBlade({
@@ -173,6 +174,58 @@ export default function addMaterialDebug(folder, material, options = {}) {
 							material[key] = parseInt(value)
 							material.needsUpdate = true
 						})
+					break
+				}
+				case 'object': {
+					//TODO: refactor
+					const uniformsNames = Object.keys(keyValue)
+					const uniformsValues = Object.values(keyValue)
+					uniformsNames.forEach((uniformName, index) => {
+						const uniformValue = uniformsValues[index].value
+						if (uniformValue.isTexture) {
+							const bindImage = (image) => {
+								gui
+									.addBinding({ image }, 'image', {
+										view: 'image',
+										label: uniformName,
+									})
+									.on('change', ({ value }) => {
+										const previousValue = uniformsValues[index].value
+										const texture = new Texture(value)
+										texture.colorSpace = previousValue.colorSpace
+										texture.flipY = previousValue.flipY
+										uniformsValues[index].value = texture
+										uniformsValues[index].value.needsUpdate = true
+									})
+							}
+							let image = uniformValue.image
+							if (uniformValue.image instanceof ImageBitmap) {
+								const canvas = document.createElement('canvas')
+								const ctx = canvas.getContext('2d')
+								const scaleFactor = 0.1
+								canvas.width = uniformValue.image.width * scaleFactor
+								canvas.height = uniformValue.image.height * scaleFactor
+								ctx.drawImage(uniformValue.image, 0, 0, canvas.width, canvas.height)
+
+								canvas.toBlob((blob) => {
+									const bitmapImageElement = new Image()
+									bitmapImageElement.src = URL.createObjectURL(blob)
+									image = bitmapImageElement
+									canvas.remove()
+
+									bindImage(image)
+								})
+							}
+
+							if (!image.src) return
+							bindImage(image)
+						} else {
+							gui.addBinding(keyValue[uniformName], 'value', {
+								label: uniformName,
+							})
+						}
+					})
+
 					break
 				}
 				default: {
@@ -189,4 +242,5 @@ export default function addMaterialDebug(folder, material, options = {}) {
 			}
 		}
 	})
+	return gui
 }

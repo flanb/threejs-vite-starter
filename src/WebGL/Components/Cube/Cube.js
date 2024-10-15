@@ -25,6 +25,9 @@ export default class Cube {
 		this.material = new ShaderMaterial({
 			fragmentShader,
 			vertexShader,
+			uniforms: {
+				uOpacity: { value: 1 },
+			},
 		})
 	}
 
