@@ -16,9 +16,9 @@ export default class SceneManager {
 		this.urlParams = new URLSearchParams(window.location.search)
 		this.sceneName = this.urlParams.get('scene')
 
-		// if scene name is not in the list, set it to main
+		// if scene name is not in the list, get the first one
 		if (!this.scenes[this.sceneName]) {
-			this.sceneName = 'main'
+			this.sceneName = Object.keys(this.scenes)[0]
 		}
 
 		if (this.debug.active) this.setDebug()
