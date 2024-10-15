@@ -1,5 +1,5 @@
-import config from 'scenes/config'
-import Experience from 'webgl/Experience.js'
+import config from 'scenes/config.js'
+import Experience from 'core/Experience.js'
 
 export default class SceneManager {
 	constructor() {

@@ -1,4 +1,4 @@
-import Experience from 'webgl/Experience.js'
+import Experience from 'core/Experience.js'
 import { AnimationMixer, Mesh } from 'three'
 import InputManager from 'utils/InputManager.js'
 import addObjectDebug from 'utils/addObjectDebug.js'

@@ -1,4 +1,4 @@
-import EventEmitter from 'utils/EventEmitter.js'
+import EventEmitter from 'core/EventEmitter.js'
 
 class InputManager extends EventEmitter {
 	constructor() {

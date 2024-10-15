@@ -1,8 +1,11 @@
 import { Raycaster, Vector2 } from 'three'
+import Experience from 'core/Experience.js'
 
 export default class InteractionManager {
 	constructor(camera) {
 		this.camera = camera
+		this.experience = new Experience()
+		this.sizes = this.experience.sizes
 
 		this.raycaster = new Raycaster()
 		this.pointer = new Vector2()
@@ -11,12 +14,14 @@ export default class InteractionManager {
 
 		this.interactiveObjects = []
 		this.intersectsObjects = []
+		this.needsUpdate = false
 	}
 
 	#setEvents() {
 		addEventListener('mousemove', (event) => {
-			this.pointer.x = (event.clientX / innerWidth) * 2 - 1
-			this.pointer.y = -(event.clientY / innerHeight) * 2 + 1
+			this.pointer.x = (event.clientX / this.sizes.width) * 2 - 1
+			this.pointer.y = -(event.clientY / this.sizes.height) * 2 + 1
+			this.needsUpdate = true
 		})
 
 		addEventListener('click', (event) => {
@@ -56,6 +61,7 @@ export default class InteractionManager {
 	}
 
 	update() {
+		if (!this.needsUpdate) return
 		this.intersectsObjects = []
 		if (!this.interactiveObjects.length) return
 		this.raycaster.setFromCamera(this.pointer, this.camera)

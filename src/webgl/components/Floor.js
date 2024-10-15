@@ -1,4 +1,4 @@
-import Experience from '../Experience.js'
+import Experience from 'core/Experience.js'
 import { CircleGeometry, Mesh, MeshStandardMaterial, RepeatWrapping, SRGBColorSpace } from 'three'
 import addObjectDebug from 'utils/addObjectDebug.js'
 

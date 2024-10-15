@@ -1,4 +1,4 @@
-import Experience from '../Experience.js'
+import Experience from 'core/Experience.js'
 import { DirectionalLight, Mesh, MeshStandardMaterial, SRGBColorSpace } from 'three'
 import addObjectDebug from 'utils/addObjectDebug.js'
 

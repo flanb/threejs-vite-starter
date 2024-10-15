@@ -1,4 +1,4 @@
-import Experience from 'webgl/Experience.js'
+import Experience from 'core/Experience.js'
 import { AudioListener, Mesh, PositionalAudio, Vector3, Audio } from 'three'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 import { PositionalAudioHelper } from 'three/examples/jsm/helpers/PositionalAudioHelper.js'
@@ -6,6 +6,7 @@ import InputManager from 'utils/InputManager.js'
 
 export default class AudioManager {
 	constructor() {
+		//TODO: make it independant
 		this.experience = new Experience()
 		this.resources = this.experience.resources
 		this.camera = this.experience.camera
@@ -16,6 +17,7 @@ export default class AudioManager {
 
 		this.setCameraListener()
 		this.resources.on('ready', () => {
+			//TODO: move this json somewhere else
 			/**
 			 * @type {{[key]: {volume: number, loop: boolean, refDistance?: number, buffer: AudioBuffer, position?: Vector3, autoplay: boolean}}}
 			 */

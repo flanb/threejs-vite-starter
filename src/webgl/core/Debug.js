@@ -2,7 +2,7 @@ import { Pane } from 'tweakpane'
 import * as TweakpaneEssentialsPlugin from '@tweakpane/plugin-essentials'
 import * as TweakpanePluginMedia from 'tweakpane-plugin-media'
 import Stats from 'stats.js'
-import Experience from 'webgl/Experience'
+import Experience from 'core/Experience.js'
 
 export default class Debug {
 	constructor() {

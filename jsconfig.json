@@ -6,7 +6,8 @@
 			"webgl/*": ["./src/webgl/*"],
 			"components/*": ["./src/webgl/components/*"],
 			"utils/*": ["./src/webgl/utils/*"],
-			"scenes/*": ["./src/webgl/scenes/*"]
+			"scenes/*": ["./src/webgl/scenes/*"],
+			"core/*": ["./src/webgl/core/*"]
 		}
 	},
 	"exclude": ["node_modules", "public", "dist"]

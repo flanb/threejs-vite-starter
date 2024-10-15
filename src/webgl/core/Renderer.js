@@ -1,4 +1,4 @@
-import Experience from './Experience.js'
+import Experience from 'core/Experience.js'
 import { CineonToneMapping, PCFSoftShadowMap, SRGBColorSpace, WebGLRenderer } from 'three'
 
 export default class Renderer {

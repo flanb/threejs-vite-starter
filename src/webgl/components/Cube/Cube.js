@@ -1,8 +1,9 @@
-import Experience from 'webgl/Experience.js'
+import Experience from 'core/Experience.js'
 import fragmentShader from './fragmentShader.frag'
 import vertexShader from './vertexShader.vert'
 import { BoxGeometry, Mesh, ShaderMaterial, Vector3 } from 'three'
 import addObjectDebug from 'utils/addObjectDebug.js'
+import InteractionManager from 'core/InteractionManager.js'
 
 export default class Cube {
 	constructor(_position = new Vector3(0, 0, 0)) {
@@ -15,6 +16,8 @@ export default class Cube {
 		this.setGeometry()
 		this.setMaterial()
 		this.setMesh()
+
+		this.setInteraction()
 	}
 
 	setGeometry() {
@@ -38,5 +41,12 @@ export default class Cube {
 		this.scene.add(this.mesh)
 
 		if (this.debug.active) addObjectDebug(this.experience.debug.ui, this.mesh)
+	}
+
+	setInteraction() {
+		this.experience.interactionManager.addInteractiveObject(this.mesh)
+		this.mesh.addEventListener('click', () => {
+			console.log('cube click')
+		})
 	}
 }

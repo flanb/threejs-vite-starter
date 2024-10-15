@@ -1,4 +1,4 @@
-import Experience from 'webgl/Experience.js'
+import Experience from 'core/Experience.js'
 import { TransformControls } from 'three/addons/controls/TransformControls.js'
 import { FolderApi } from '@tweakpane/core'
 import { Object3D } from 'three'

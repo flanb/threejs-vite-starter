@@ -1,4 +1,4 @@
-import Experience from '../Experience.js'
+import Experience from 'core/Experience.js'
 import Cube from 'components/Cube/Cube.js'
 
 export default class Main {

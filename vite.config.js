@@ -11,10 +11,11 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'src'),
-			webgl: path.resolve(__dirname, 'src/WebGL'),
-			utils: path.resolve(__dirname, 'src/WebGL/Utils'),
-			scenes: path.resolve(__dirname, 'src/WebGL/Scenes'),
-			components: path.resolve(__dirname, 'src/WebGL/Components'),
+			webgl: path.resolve(__dirname, 'src/webgl'),
+			utils: path.resolve(__dirname, 'src/webgl/utils'),
+			scenes: path.resolve(__dirname, 'src/webgl/scenes'),
+			components: path.resolve(__dirname, 'src/webgl/components'),
+			core: path.resolve(__dirname, 'src/webgl/core'),
 		},
 	},
 	plugins: [glslify.glslify()],
