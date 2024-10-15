@@ -8,9 +8,9 @@ export default class AudioManager {
 	constructor() {
 		//TODO: make it independant
 		this.experience = new Experience()
-		this.resources = this.experience.resources
 		this.camera = this.experience.camera
 		this.scene = this.experience.scene
+		this.resources = this.scene.resources
 		this.debug = this.experience.debug
 
 		this.audioContextReady = false
@@ -131,14 +131,20 @@ export default class AudioManager {
 							}
 						})
 						audio.transform.attach(audio.mesh)
-						audio.transform.devObject = true
-						this.scene.add(audio.transform)
+						audio.transform.getHelper().devObject = true
+						this.scene.add(audio.transform.getHelper())
 					} else {
 						audio.helper.dispose()
 						audio.instance.remove(audio.helper)
 						delete audio.helper
-						audio.transform.dispose()
-						this.scene.remove(audio.transform)
+						//TODO: Temporary fix for three function
+						// audio.transform.dispose()
+						audio.transform.disconnect()
+						audio.transform.getHelper().traverse(function (child) {
+							if (child.geometry) child.geometry.dispose()
+							if (child.material) child.material.dispose()
+						})
+						this.scene.remove(audio.transform.getHelper())
 						delete audio.transform
 					}
 				})

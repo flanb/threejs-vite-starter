@@ -8,7 +8,7 @@ export default class Fox {
 	constructor() {
 		this.experience = new Experience()
 		this.scene = this.experience.scene
-		this.resources = this.experience.resources
+		this.resources = this.scene.resources
 		this.debug = this.experience.debug
 		this.time = this.experience.time
 

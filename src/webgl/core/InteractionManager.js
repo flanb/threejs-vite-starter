@@ -47,7 +47,8 @@ export default class InteractionManager {
 			// if (!this.intersectsObjects.length) return
 			const distance = lastPosition.distanceTo(this.pointer)
 			if (distance > 0.01) {
-				dragElement.dispatchEvent({ type: 'drag', distance, direction: this.pointer.clone().sub(lastPosition) })
+				//TODO: WIP
+				// dragElement.dispatchEvent({ type: 'drag', distance, direction: this.pointer.clone().sub(lastPosition) })
 				// this.intersectsObjects.forEach((object) => {
 				// 	object.dispatchEvent({ type: 'drag', distance: lastPosition.distanceTo(this.pointer) })
 				// })

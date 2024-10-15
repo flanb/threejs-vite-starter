@@ -1,4 +1,4 @@
-import Main from './Main.js'
+import Main from './Main'
 import SingleCube from './SingleCube.js'
 
 export default {

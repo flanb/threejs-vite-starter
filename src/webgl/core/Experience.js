@@ -5,7 +5,7 @@ import Camera from 'core/Camera.js'
 import Renderer from './Renderer.js'
 import Resources from 'core/Resources.js'
 import SceneManager from 'core/SceneManager.js'
-import sources from '../sources.json'
+import sources from 'scenes/Main/sources.json'
 import { Mesh, Scene } from 'three'
 import AudioManager from 'core/AudioManager.js'
 import InteractionManager from 'core/InteractionManager.js'
@@ -31,13 +31,12 @@ export default class Experience {
 		this.time = new Time()
 		this.scene = new Scene()
 		this.debug = new Debug()
-		this.resources = new Resources(sources)
 		this.camera = new Camera()
+		this.interactionManager = new InteractionManager(this.camera.instance)
 		this.activeScene = new SceneManager()
 		this.renderer = new Renderer()
 
 		this.audioManager = new AudioManager()
-		this.interactionManager = new InteractionManager(this.camera.instance)
 
 		// Resize event
 		this.sizes.on('resize', () => {
@@ -56,7 +55,7 @@ export default class Experience {
 	}
 
 	update() {
-		this.activeScene.update()
+		if (this.activeScene.update) this.activeScene.update()
 		this.renderer.update()
 		this.debug.update()
 		this.interactionManager.update()

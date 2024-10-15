@@ -1,9 +1,8 @@
 import EventEmitter from 'core/EventEmitter.js'
-import { AudioLoader, CubeTextureLoader, TextureLoader } from 'three'
+import { AudioLoader, CubeTexture, CubeTextureLoader, Object3D, Texture, TextureLoader } from 'three'
 import Experience from 'core/Experience.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { Texture, CubeTexture, Object3D } from 'three'
 
 export default class Resources extends EventEmitter {
 	constructor(sources) {
