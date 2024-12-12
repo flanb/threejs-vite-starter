@@ -87,35 +87,47 @@ export default class Resources extends EventEmitter {
 		// Load each source
 		for (const source of this.sources) {
 			source.startTime = performance.now()
-			switch (source.type) {
+			if (source.path instanceof Array) {
+				this.loaders.cubeTextureLoader.load(source.path, (file) => {
+					this.sourceLoaded(source, file)
+				})
+				continue
+			}
+
+			switch (source.path.split('.').pop()) {
 				case 'gltf':
+				case 'glb':
 					this.loaders.gltfLoader.load(source.path, (file) => {
 						this.sourceLoaded(source, file)
 					})
 					break
-				case 'texture':
-					if (source.path.endsWith('.ktx2')) {
-						this.loaders.ktx2Loader.load(source.path, (file) => {
-							this.sourceLoaded(source, file)
-						})
-					} else {
-						this.loaders.textureLoader.load(source.path, (file) => {
-							this.sourceLoaded(source, file)
-						})
-					}
+				case 'png':
+				case 'jpg':
+				case 'jpeg':
+				case 'webp':
+					this.loaders.textureLoader.load(source.path, (file) => {
+						this.sourceLoaded(source, file)
+					})
+					break
+				case 'ktx2':
+					this.loaders.ktx2Loader.load(source.path, (file) => {
+						this.sourceLoaded(source, file)
+					})
 					break
 				case 'cubeTexture':
 					this.loaders.cubeTextureLoader.load(source.path, (file) => {
 						this.sourceLoaded(source, file)
 					})
 					break
-				case 'audio':
+				case 'mp3':
+				case 'ogg':
+				case 'wav':
 					this.loaders.audioLoader.load(source.path, (file) => {
 						this.sourceLoaded(source, file)
 					})
 					break
 				default:
-					console.error(source.type + ' is not a valid source type')
+					console.error(source.path + ' is not a valid source type')
 					break
 			}
 		}
