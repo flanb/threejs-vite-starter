@@ -1,6 +1,7 @@
 import { Pane } from 'tweakpane'
 import * as TweakpaneEssentialsPlugin from '@tweakpane/plugin-essentials'
 import * as TweakpanePluginMedia from 'tweakpane-plugin-media'
+import * as TweakpaneFileImportPlugin from 'tweakpane-plugin-file-import'
 import Stats from 'stats.js'
 import Experience from 'core/Experience.js'
 
@@ -36,6 +37,7 @@ export default class Debug {
 	setPlugins() {
 		this.ui.registerPlugin(TweakpaneEssentialsPlugin)
 		this.ui.registerPlugin(TweakpanePluginMedia)
+		this.ui.registerPlugin(TweakpaneFileImportPlugin)
 	}
 
 	setImportExportButtons() {
@@ -260,7 +262,7 @@ export default class Debug {
 						`📦 %c${object.name ? object.name : `unnamed ${object.type}`}%c added to the scene`,
 						'font-weight: bold; background-color: #ffffff20; padding: 0.1rem 0.3rem; border-radius: 0.3rem',
 						'font-weight: normal',
-						object,
+						object
 					)
 				}
 				return original.apply(this, arguments)

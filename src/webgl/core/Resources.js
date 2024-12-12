@@ -4,6 +4,8 @@ import Experience from 'core/Experience.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 
 export default class Resources extends EventEmitter {
 	constructor(sources) {
@@ -76,6 +78,8 @@ export default class Resources extends EventEmitter {
 		this.loaders.textureLoader = new TextureLoader()
 		this.loaders.cubeTextureLoader = new CubeTextureLoader()
 		this.loaders.audioLoader = new AudioLoader()
+		this.loaders.fbxLoader = new FBXLoader()
+		this.loaders.exrLoader = new EXRLoader()
 	}
 
 	startLoading() {
@@ -95,9 +99,21 @@ export default class Resources extends EventEmitter {
 			}
 
 			switch (source.path.split('.').pop()) {
+				//models
 				case 'gltf':
 				case 'glb':
 					this.loaders.gltfLoader.load(source.path, (file) => {
+						this.sourceLoaded(source, file)
+					})
+					break
+				case 'fbx':
+					this.loaders.fbxLoader.load(source.path, (file) => {
+						this.sourceLoaded(source, file)
+					})
+					break
+				//textures
+				case 'exr':
+					this.loaders.exrLoader.load(source.path, (file) => {
 						this.sourceLoaded(source, file)
 					})
 					break
@@ -119,6 +135,7 @@ export default class Resources extends EventEmitter {
 						this.sourceLoaded(source, file)
 					})
 					break
+				//audio
 				case 'mp3':
 				case 'ogg':
 				case 'wav':

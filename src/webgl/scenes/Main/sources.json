@@ -26,5 +26,13 @@
 	{
 		"name": "foxAudio",
 		"path": "audio/fox.mp3"
+	},
+	{
+		"name": "clothModel",
+		"path": "models/cloth.fbx"
+	},
+	{
+		"name": "clothPositionTexture",
+		"path": "textures/cloth_pos.exr"
 	}
 ]

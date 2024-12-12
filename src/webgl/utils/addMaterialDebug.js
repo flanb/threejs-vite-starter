@@ -161,7 +161,7 @@ export default function addMaterialDebug(folder, material, options = {}) {
 							: materialOption.options.map((v) => ({
 									value: v.toString(),
 									text: v.toString(),
-								}))
+							  }))
 
 					gui
 						.addBlade({
@@ -199,7 +199,9 @@ export default function addMaterialDebug(folder, material, options = {}) {
 									})
 							}
 							let image = uniformValue.image
+
 							if (uniformValue.image instanceof ImageBitmap) {
+								//TODO check OffscreenCanvas and getContext("bitmaprenderer")
 								const canvas = document.createElement('canvas')
 								const ctx = canvas.getContext('2d')
 								const scaleFactor = 0.1
@@ -215,6 +217,15 @@ export default function addMaterialDebug(folder, material, options = {}) {
 
 									bindImage(image)
 								})
+							} else if (uniformValue.isDataTexture) {
+								const obj = Object.values(window.experience.scene.resources.sources).find(
+									(resource) => resource.name === uniformValue.name
+								)
+								console.log(obj)
+								const image = new Image()
+								image.src = obj.path
+
+								bindImage(image)
 							}
 
 							if (!image.src) return

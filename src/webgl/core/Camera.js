@@ -21,7 +21,7 @@ export default class Camera {
 			frustum: { min: 1, max: 100 },
 			position: new Vector3(6, 4, 8),
 			target: new Vector3(0, 0, 0),
-			currentCamera: 'sceneCamera',
+			currentCamera: 'controlsCamera',
 		}
 
 		this.setInstance()
@@ -55,7 +55,7 @@ export default class Camera {
 			this.options.fov,
 			this.sizes.width / this.sizes.height,
 			this.options.frustum.min,
-			this.options.frustum.max,
+			this.options.frustum.max
 		)
 		this.sceneCamera.position.copy(this.options.position)
 		this.sceneCamera.lookAt(this.options.target)
