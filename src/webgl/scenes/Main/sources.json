@@ -15,8 +15,7 @@
 	{
 		"name": "grassColorTexture",
 		"type": "texture",
-		"path": "textures/dirt/color.jpg",
-		"colorSpace": "srgb"
+		"path": "textures/dirt/color.ktx2"
 	},
 	{
 		"name": "grassNormalTexture",

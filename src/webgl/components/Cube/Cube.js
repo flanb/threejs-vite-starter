@@ -3,7 +3,6 @@ import fragmentShader from './fragmentShader.frag'
 import vertexShader from './vertexShader.vert'
 import { BoxGeometry, Mesh, ShaderMaterial, Vector3 } from 'three'
 import addObjectDebug from 'utils/addObjectDebug.js'
-import InteractionManager from 'core/InteractionManager.js'
 
 export default class Cube {
 	constructor(_position = new Vector3(0, 0, 0)) {

@@ -1,8 +1,9 @@
 import EventEmitter from 'core/EventEmitter.js'
-import { AudioLoader, CubeTexture, CubeTextureLoader, Object3D, Texture, TextureLoader } from 'three'
+import { AudioLoader, CubeTexture, CubeTextureLoader, Object3D, Texture, TextureLoader, WebGLRenderer } from 'three'
 import Experience from 'core/Experience.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader'
 
 export default class Resources extends EventEmitter {
 	constructor(sources) {
@@ -69,6 +70,9 @@ export default class Resources extends EventEmitter {
 		const dracoLoader = new DRACOLoader()
 		dracoLoader.setDecoderPath('/draco/')
 		this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
+		this.loaders.ktx2Loader = new KTX2Loader()
+		this.loaders.ktx2Loader.setTranscoderPath('/basis/')
+		this.loaders.ktx2Loader.detectSupport(new WebGLRenderer())
 		this.loaders.textureLoader = new TextureLoader()
 		this.loaders.cubeTextureLoader = new CubeTextureLoader()
 		this.loaders.audioLoader = new AudioLoader()
@@ -90,9 +94,15 @@ export default class Resources extends EventEmitter {
 					})
 					break
 				case 'texture':
-					this.loaders.textureLoader.load(source.path, (file) => {
-						this.sourceLoaded(source, file)
-					})
+					if (source.path.endsWith('.ktx2')) {
+						this.loaders.ktx2Loader.load(source.path, (file) => {
+							this.sourceLoaded(source, file)
+						})
+					} else {
+						this.loaders.textureLoader.load(source.path, (file) => {
+							this.sourceLoaded(source, file)
+						})
+					}
 					break
 				case 'cubeTexture':
 					this.loaders.cubeTextureLoader.load(source.path, (file) => {
@@ -115,6 +125,7 @@ export default class Resources extends EventEmitter {
 		const { name, path, type, startTime, ...rest } = source
 		Object.assign(file, rest)
 		this.items[source.name] = file
+		file.name = source.name
 		this.loaded++
 		source.endTime = performance.now()
 		source.loadTime = Math.floor(source.endTime - source.startTime)
@@ -123,7 +134,7 @@ export default class Resources extends EventEmitter {
 			console.debug(
 				`%c🖼️ ${source.name}%c loaded in ${source.loadTime}ms. (${this.loaded}/${this.toLoad})`,
 				'font-weight: bold',
-				'font-weight: normal',
+				'font-weight: normal'
 			)
 		if (this.loadingScreenElement) {
 			this.loadingBarElement.style.transform = `scaleX(${this.loaded / this.toLoad})`
