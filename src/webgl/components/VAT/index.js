@@ -16,7 +16,9 @@ export default class VAT {
 	}
 
 	#createModel() {
-		this.model = this.resources.items.clothModel.clone()
+		this.model = this.resources.items.clothModel.scene.clone()
+		console.log(this.model)
+
 		this.model.position.y = 2
 
 		this.scene.add(this.model)
@@ -24,14 +26,19 @@ export default class VAT {
 
 	#createMaterial() {
 		const vatTexture = this.resources.items.clothPositionTexture
+		const normalTexture = this.resources.items.clothNormalTexture
+		// vatTexture.minFilter = NearestFilter
+		// vatTexture.magFilter = NearestFilter
+		// vatTexture.format = RGBAFormat
 
 		this.material = new ShaderMaterial({
 			side: 2,
 			uniforms: {
 				uTime: { value: 0 },
 				posTexture: { value: vatTexture },
-				totalFrames: { value: 99 },
-				fps: { value: 30 },
+				normalTexture: { value: normalTexture },
+				totalFrames: { value: 50 },
+				fps: { value: 24 },
 			},
 			vertexShader,
 			fragmentShader,
@@ -57,44 +64,54 @@ export default class VAT {
 				const blob = new Blob([value])
 				const url = URL.createObjectURL(blob)
 
-				switch (value.name.split('.').pop()) {
-					case 'glb':
-					case 'gltf':
-						const { gltfLoader } = this.scene.resources.loaders
+				const { gltfLoader } = this.scene.resources.loaders
 
-						gltfLoader.load(url, (gltf) => {
-							this.scene.remove(this.model)
-							this.model = gltf.scene
-							this.scene.add(this.model)
-							this.model.position.y = 2
+				gltfLoader.load(url, (gltf) => {
+					this.scene.remove(this.model)
+					this.model = gltf.scene
+					this.scene.add(this.model)
+					this.model.position.y = 2
 
-							this.model.traverse((child) => {
-								if (child.isMesh) {
-									child.material = this.material
-								}
-							})
-						})
-						break
-					case 'fbx':
-						const { fbxLoader } = this.scene.resources.loaders
-						fbxLoader.load(url, (fbx) => {
-							this.scene.remove(this.model)
-							this.model = fbx
-							this.scene.add(this.model)
-							this.model.position.y = 2
+					this.model.traverse((child) => {
+						if (child.isMesh) {
+							child.material = this.material
+						}
+					})
+				})
+			})
+		debugFolder
+			.addBinding({ file: '' }, 'file', {
+				view: 'file-input',
+				label: 'new position texture (exr)',
+			})
+			.on('change', ({ value }) => {
+				const blob = new Blob([value])
+				const url = URL.createObjectURL(blob)
 
-							this.model.traverse((child) => {
-								if (child.isMesh) {
-									child.material = this.material
-								}
-							})
-						})
-						break
-				}
+				const { exrLoader } = this.scene.resources.loaders
+
+				exrLoader.load(url, (texture) => {
+					this.material.uniforms.posTexture.value = texture
+				})
+			})
+		debugFolder
+			.addBinding({ file: '' }, 'file', {
+				view: 'file-input',
+				label: 'new normal texture (png)',
+			})
+			.on('change', ({ value }) => {
+				const blob = new Blob([value])
+				const url = URL.createObjectURL(blob)
+
+				const { textureLoader } = this.scene.resources.loaders
+
+				textureLoader.load(url, (texture) => {
+					this.material.uniforms.normalTexture.value = texture
+				})
 			})
 	}
 
 	update() {
-		if (this.material) this.material.uniforms.uTime.value = this.experience.time.elapsed / 1000
+		if (this.material) this.material.uniforms.uTime.value = this.experience.time.elapsed * 0.001
 	}
 }

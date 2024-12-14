@@ -29,10 +29,14 @@
 	},
 	{
 		"name": "clothModel",
-		"path": "models/cloth.fbx"
+		"path": "models/cloth.glb"
 	},
 	{
 		"name": "clothPositionTexture",
-		"path": "textures/cloth_pos.exr"
+		"path": "textures/absolutes.exr"
+	},
+	{
+		"name": "clothNormalTexture",
+		"path": "textures/normals.png"
 	}
 ]

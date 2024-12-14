@@ -221,7 +221,6 @@ export default function addMaterialDebug(folder, material, options = {}) {
 								const obj = Object.values(window.experience.scene.resources.sources).find(
 									(resource) => resource.name === uniformValue.name
 								)
-								console.log(obj)
 								const image = new Image()
 								image.src = obj.path
 
