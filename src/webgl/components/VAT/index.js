@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, ShaderMaterial, Vector3, NearestFilter, RGBAFormat } from 'three'
+import { BoxGeometry, Mesh, ShaderMaterial, Vector3, NearestFilter, RGBAFormat, RepeatWrapping } from 'three'
 import Experience from 'core/Experience.js'
 import vertexShader from './vertexShader.vert'
 import fragmentShader from './fragmentShader.frag'
@@ -29,7 +29,7 @@ export default class VAT {
 		const normalTexture = this.resources.items.clothNormalTexture
 		// vatTexture.minFilter = NearestFilter
 		// vatTexture.magFilter = NearestFilter
-		// vatTexture.format = RGBAFormat
+		vatTexture.wrapT = RepeatWrapping
 
 		this.material = new ShaderMaterial({
 			side: 2,
@@ -37,8 +37,8 @@ export default class VAT {
 				uTime: { value: 0 },
 				posTexture: { value: vatTexture },
 				normalTexture: { value: normalTexture },
-				totalFrames: { value: 50 },
-				fps: { value: 24 },
+				totalFrames: { value: 60 },
+				fps: { value: 30 },
 			},
 			vertexShader,
 			fragmentShader,

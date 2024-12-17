@@ -3,6 +3,7 @@ attribute vec2 uv1;
 uniform float uTime; // time in s
 uniform float totalFrames; // 10
 uniform float fps; // 30
+uniform float steps; // 5
 uniform sampler2D posTexture;
 uniform sampler2D normalTexture;
 
@@ -24,3 +25,5 @@ void main() {
 	gl_Position = projectionMatrix * modelViewMatrix * translated;
 
 }
+
+//TODO: try to do lerp when steps

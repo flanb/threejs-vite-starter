@@ -33,7 +33,7 @@
 	},
 	{
 		"name": "clothPositionTexture",
-		"path": "textures/absolutes.exr"
+		"path": "textures/offsets.exr"
 	},
 	{
 		"name": "clothNormalTexture",
